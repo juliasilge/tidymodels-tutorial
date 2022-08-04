@@ -1,0 +1,563 @@
+---
+title: "6 - Tuning Hyperparameters"
+subtitle: "Machine learning with tidymodels"
+format:
+  revealjs: 
+    slide-number: true
+    footer: <https://bit.ly/learn-tidymodels>
+    include-before-body: header.html
+    theme: [default, tutorial.scss]
+    width: 1280
+    height: 720
+knitr:
+  opts_chunk: 
+    echo: true
+    collapse: true
+    comment: "#>"
+---
+
+```{r setup}
+#| include: false
+#| file: setup.R
+```
+
+```{r}
+#| include: false
+library(rpart)
+library(partykit)
+theme_set(theme_light())
+doParallel::registerDoParallel()
+```
+
+```{r}
+#| include: false
+library(tidymodels)
+library(tidyverse)
+abalone <- read_csv("abalone.csv") %>% mutate_if(is.character, as.factor)
+
+set.seed(123)
+ring_split <- initial_split(abalone, prop = 0.8, strata = rings)
+ring_train <- training(ring_split)
+ring_test <- testing(ring_split)
+
+set.seed(234)
+ring_folds <- vfold_cv(ring_train, v = 5, strata = rings)
+```
+
+# Hyperparameters
+
+. . .
+
+Some model or preprocessing parameters cannot be estimated directly from your data
+
+## Choose the best parameter `r hexes("recipes")`
+
+```{r}
+#| code-line-numbers: "4"
+ring_rec <-
+  recipe(rings ~ ., data = ring_train) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_ns(shucked_weight, deg_free = 4)
+```
+
+. . .
+
+How do we know that 4️⃣ is a good value?
+
+## Choose the best parameter `r hexes("recipes", "tune")`
+
+```{r}
+#| code-line-numbers: "4"
+ring_rec <-
+  recipe(rings ~ ., data = ring_train) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_ns(shucked_weight, deg_free = tune())
+```
+
+## {background-image="https://www.tmwr.org/figures/ames-latitude-splines-1.png" background-size="contain"}
+
+:::notes
+Splines replace the existing numeric predictor with a set of columns that allow a model to emulate a flexible, nonlinear relationship.
+
+More spline terms = more "wiggly", i.e. flexibly model a nonlinear relationship
+
+How many spline terms? This is called *degrees of freedom*
+
+2 and 5 look like they underfit; 20 and 100 look like they overfit
+:::
+
+## Splines and nonlinear relationships
+
+```{r}
+#| out-width: '100%'
+#| echo: false
+#| fig-align: center
+
+ring_train %>%
+  group_by(shucked_weight = cut(shucked_weight, seq(0, 1.2, 0.1))) %>%
+  summarize(rings = mean(rings), n = n()) %>%
+  mutate(shucked_weight = forcats::fct_recode(shucked_weight, "<0.1" = "(0,0.1]", ">1.1" = "(1.1,1.2]")) %>%
+  filter(!is.na(shucked_weight)) %>%
+  ggplot(aes(shucked_weight, rings)) +
+  geom_line(group = 1, size = 2, alpha = 0.8, color = test_color) +
+  labs(x = "Shucked weight (bucketed)",
+       y = "Mean rings")
+
+```
+
+:::notes
+Our abalone data exhibits nonlinear relationships
+
+We can model nonlinearity like this via a *model* (later today) or *feature engineering*
+
+How do we decide how "wiggly" or flexible to make our spline features? TUNING 
+:::
+
+# Use the `tune_*()` functions to tune models
+
+. . .
+
+The main two strategies for optimization are:
+
+-   **Grid search** 💠 which tests a pre-defined set of candidate values
+
+-   **Iterative search** 🌀 which suggests/estimates new values of candidate parameters to evaluate
+
+
+## Choose the best parameter `r hexes("recipes", "workflows", "parsnip", "tune")` {auto-animate="true"}
+
+```{r}
+ring_rec <-
+  recipe(rings ~ ., data = ring_train) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_ns(shucked_weight, deg_free = tune())
+
+spline_wf <- workflow(ring_rec, linear_reg())
+spline_wf
+```
+
+## Choose the best parameter `r hexes("recipes", "workflows", "parsnip", "tune")` {auto-animate="true"}
+
+```{r}
+set.seed(123)
+spline_res <- tune_grid(spline_wf, ring_folds)
+spline_res
+```
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Use `tune_grid()` to tune your workflow with a recipe.*
+
+*Collect the metrics from the results.*
+
+*Use `autoplot()` to visualize the results.*
+
+*Try `show_best()` to understand which parameter values are best.*
+
+```{r}
+#| echo: false
+countdown(minutes = 5, id = "tune-spline")
+```
+
+
+## Tuning results  `r hexes("recipes", "workflows", "parsnip", "tune")` {auto-animate="true"}
+
+```{r}
+collect_metrics(spline_res)
+```
+
+## Tuning results  `r hexes("recipes", "workflows", "parsnip", "tune")` {auto-animate="true"}
+
+```{r}
+collect_metrics(spline_res, summarize = FALSE)
+```
+
+## Tuning results  `r hexes("recipes", "workflows", "parsnip", "tune")` {auto-animate="true"}
+
+```{r}
+#| fig-align: 'center'
+autoplot(spline_res, metric = "rmse")
+```
+
+## Tuning results  `r hexes("recipes", "workflows", "parsnip", "tune")` {auto-animate="true"}
+
+```{r}
+show_best(spline_res)
+```
+
+
+## Optimize tuning parameters
+
+::: {.incremental}
+
+-   Try different values and measure their performance
+
+-   Find good values for these parameters
+
+-   Finalize the model by fitting the model with these parameters to the entire training set
+
+:::
+
+# Tree depth in a decision tree?
+
+::: fragment
+Yes
+✅
+:::
+
+# Number of PCA components to retain?
+
+::: fragment
+Yes
+✅
+:::
+
+# Bayesian priors for model parameters?
+
+::: fragment
+Hmmmm, probably not
+❌
+:::
+
+
+# Is the random seed a tuning parameter?
+
+::: fragment
+Nope
+❌
+:::
+
+
+
+
+## Customize grid search `r hexes("dials")` {auto-animate="true"}
+
+- You can control the grid used to search the parameter space
+
+- Use the `grid_*()` functions, or create your own tibble
+
+. . .
+
+```{r}
+tibble(deg_free = 1:10)
+```
+
+## Customize grid search `r hexes("dials")` {auto-animate="true"}
+
+- You can control the grid used to search the parameter space
+
+- Use the `grid_*()` functions, or create your own tibble
+
+
+```{r}
+grid_regular(list(deg_free = spline_degree()), levels = 5)
+```
+
+## Customize grid search `r hexes("dials")` {auto-animate="true"}
+
+- You can control the grid used to search the parameter space
+
+- Use the `grid_*()` functions, or create your own tibble
+
+
+```{r}
+grid_regular(list(deg_free = spline_degree(), tree_depth()), levels = 5)
+```
+
+## Customize grid search `r hexes("dials")` {auto-animate="true"}
+
+- You can control the grid used to search the parameter space
+
+- Use the `grid_*()` functions, or create your own tibble
+
+
+```{r}
+grid_latin_hypercube(list(deg_free = spline_degree(), tree_depth()), size = 5)
+```
+
+
+::: notes
+-   A *space-filling design* like this tends to perform better than random grids.
+-   Space-filling designs are also usually more efficient than regular grids.
+:::
+
+
+# Boosted trees 🌳🌲🌴🌵🌴🌳🌳🌴🌲🌵🌴🌲🌳🌴🌳🌵🌵🌴🌲🌲🌳🌴🌳🌴🌲🌴🌵🌴🌲🌴🌵🌲🌵🌴🌲🌳🌴🌵🌳🌴🌳🌲
+
+## Boosted trees 🌳🌲🌴🌵🌳🌳🌴🌲🌵🌴🌳🌵
+
+-   Ensemble many decision tree models
+
+::: fragment
+### Review how a decision tree model works:
+
+-   Series of splits or if/then statements based on predictors
+
+-   First the tree *grows* until some condition is met (maximum depth, no more data)
+
+-   Then the tree is *pruned* to reduce its complexity
+:::
+
+## Single decision tree
+
+```{r tree-example}
+#| echo: false
+#| fig.width: 16
+#| fig.height: 8
+#| fig-align: 'center'
+#| dev-args: list(bg = "transparent")
+tree_mod <- 
+    rpart::rpart(
+        rings ~ .,
+        data = ring_train,
+        control = rpart::rpart.control(maxdepth = 3, cp = 0.001)
+    ) %>% 
+    partykit::as.party()
+plot(tree_mod)
+```
+
+## Boosted trees 🌳🌲🌴🌵🌳🌳🌴🌲🌵🌴🌳🌵
+
+Boosting methods fit a *sequence* of tree-based models:
+
+. . .
+
+-   Each tree is dependent on the one before and tries to compensate for any poor results in the previous trees
+
+-   This is like gradient ascent/descent methods
+
+## Boosted tree tuning parameters  
+
+Most modern boosting methods have *a lot* of tuning parameters!
+
+. . .
+
+-   For tree growth and pruning (`min_n`, `max_depth`, etc)
+
+-   For boosting (`trees`, `stop_iter`, `learn_rate`)
+
+. . .
+
+We'll use *early stopping* to stop boosting when a few iterations produce consecutively worse results.
+
+## Comparing tree ensembles
+
+::: columns
+::: {.column width="50%"}
+### Random forest
+
+* Independent trees
+* Bootstrapped data
+* No pruning
+* 1000's of trees
+:::
+
+::: {.column width="50%"}
+### Boosting
+
+* Dependent trees
+* Tune tree parameters
+* Far fewer trees
+:::
+:::
+
+:::notes
+
+Typical performance: boosting > random forest > bagging > single trees
+
+:::
+
+## Build an xgboost workflow `r hexes("recipes", "workflows", "parsnip", "tune")`
+
+```{r xgboost-specs}
+xgb_spec <-
+  boost_tree(
+    trees = 500, min_n = tune(), stop_iter = tune(), tree_depth = tune(),
+    learn_rate = tune(), loss_reduction = tune()
+  ) %>%
+  set_mode("regression") %>% 
+  set_engine("xgboost", validation = 0.1)
+
+xgb_rec <- 
+  recipe(rings ~ ., data = ring_train) %>%
+  step_dummy(all_nominal_predictors())
+
+xgb_wf <- workflow(xgb_rec, xgb_spec) 
+```
+
+:::notes
+`validation` is an argument to `parsnip::xgb_train()`, not directly to xgboost. It generates a validation set that is used by xgboost when evaluating model performance. It is eventually assigned to `xgb.train(watchlist = list(validation = data))`.
+
+See `translate(xgb_spec)` to see where it is passed to `parsnip::xgb_train()`.
+:::
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Create your boosted tree workflow.*
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 3, id = "xgb-wf")
+```
+
+## Tuning `r hexes(c("tune"))`
+
+This will take some time to run ⏳
+
+```{r xgboost-tune}
+set.seed(9)
+ctrl_abalone <- control_grid(save_pred = TRUE)
+xgb_res <-
+  tune_grid(xgb_wf, resamples = ring_folds, grid = 15, control = ctrl_abalone)
+```
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Start tuning the boosted tree model!*
+
+*We won't wait for everyone's tuning to finish, but take this time to get it started before we move on.*
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 3, id = "tune-xgboost")
+```
+
+## Tuning results `r hexes(c("tune"))`
+
+```{r}
+xgb_res
+```
+
+## Tuning results `r hexes(c("tune"))`
+
+```{r autoplot-xgboost}
+#| out-width: '100%'
+#| fig-width: 11
+#| fig-height: 4
+#| fig-align: 'center'
+#| dev-args: list(bg = "transparent")
+autoplot(xgb_res)
+```
+
+## Compare models
+
+Best logistic regression results:
+
+```{r logistic-best}
+spline_res %>% 
+  show_best(metric = "rmse", n = 1) %>% 
+  select(.metric, .estimator, mean, n, std_err, .config)
+```
+
+::: fragment
+Best boosting results:
+
+```{r xgboost-best}
+xgb_res %>% 
+  show_best(metric = "rmse", n = 1) %>% 
+  select(.metric, .estimator, mean, n, std_err, .config)
+```
+:::
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Can you get better RMSE results with xgboost?*
+
+*Try increasing `learn_rate` beyond the original range.*
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 20, id = "improve-xgb")
+```
+
+## Finalize and fit the model `r hexes(c("workflows", "tune"))` {auto-animate="true"} 
+
+```{r}
+best_rmse <- select_best(spline_res, metric = "rmse")
+best_rmse
+```
+
+## Finalize and fit the model `r hexes(c("workflows", "tune"))` {auto-animate="true"} 
+
+```{r}
+best_rmse <- select_best(spline_res, metric = "rmse")
+
+final_res <-
+  spline_wf %>% 
+  finalize_workflow(best_rmse) %>%
+  last_fit(ring_split)
+
+final_res
+```
+
+. . .
+
+Remember that `last_fit()` fits one time with the training set, then evaluates one time with the testing set.
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Finalize your workflow with the best parameters.*
+
+*You could use either the spline or xgboost workflow.*
+
+*Create a final fit.*
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 8, id = "finalize-xgb")
+```
+
+## Estimates of RMSE `r hexes(c("tune"))`
+
+Holdout results from tuning:
+
+```{r val-res}
+spline_res %>% 
+  show_best(metric = "rmse", n = 1) %>% 
+  select(.metric, mean, n, std_err)
+```
+
+::: fragment
+Test set results:
+
+```{r test-res}
+final_res %>% collect_metrics()
+```
+:::
+
+## Final fitted workflow
+
+Extract the final fitted workflow (fit using the training set):
+
+```{r}
+fitted_wf <- extract_workflow(final_res)
+
+# use this object to predict or deploy
+predict(fitted_wf, ring_test[1:3,])
+```
+
+## Next steps
+
+::: {.incremental}
+
+-   Use [explainers](https://www.tmwr.org/explain.html) to characterize the model and the predictions
+
+-   [Document the model](https://vetiver.rstudio.com/learn-more/model-card.html)
+
+
+-   [Deploy the model](https://vetiver.rstudio.com/get-started/)
+
+
+-   Create an [applicability domain model](https://applicable.tidymodels.org/) to help monitor our data over time
+
+:::

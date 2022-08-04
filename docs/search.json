@@ -1,0 +1,1234 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Machine learning with tidymodels",
+    "section": "",
+    "text": "These are the materials for a one-day workshops on tidymodels. This workshop provides an introduction to machine learning with R using the tidymodels framework, a collection of packages for modeling and machine learning using tidyverse principles. We will build, evaluate, compare, and tune predictive models. Along the way, we’ll learn about key concepts in machine learning including overfitting, resampling, and feature engineering. Learners will gain knowledge about good predictive modeling practices, as well as hands-on experience using tidymodels packages like parsnip, rsample, recipes, yardstick, tune, and workflows.\nFor a two-day workshop, check out https://workshops.tidymodels.org"
+  },
+  {
+    "objectID": "index.html#is-this-workshop-for-me",
+    "href": "index.html#is-this-workshop-for-me",
+    "title": "Machine learning with tidymodels",
+    "section": "Is this workshop for me? ",
+    "text": "Is this workshop for me? \nThis course assumes intermediate R knowledge. This workshop is for you if:\n\nYou can use the magrittr pipe %>% and/or native pipe |>\nYou are familiar with functions from dplyr, tidyr, and ggplot2\nYou can read data into R, transform and reshape data, and make a wide variety of graphs\n\nWe expect participants to have some exposure to basic statistical concepts, but NOT intermediate or expert familiarity with modeling or machine learning."
+  },
+  {
+    "objectID": "index.html#preparation",
+    "href": "index.html#preparation",
+    "title": "Machine learning with tidymodels",
+    "section": "Preparation",
+    "text": "Preparation\nPlease join the workshop with a computer that has the following installed (all available for free):\n\nA recent version of R, available at https://cran.r-project.org/\nA recent version of RStudio Desktop (RStudio Desktop Open Source License, at least v2022.02), available at https://www.rstudio.com/download\nThe following R packages, which you can install from the R console:\n\n\ninstall.packages(c(\"doParallel\", \"ranger\", \"rpart\", \n                   \"rpart.plot\", \"tidymodels\", \"tidyverse\",\n                   \"vetiver\", \"xgboost\"))"
+  },
+  {
+    "objectID": "index.html#slides",
+    "href": "index.html#slides",
+    "title": "Machine learning with tidymodels",
+    "section": "Slides",
+    "text": "Slides\n\n01: Introduction\n02: Your data budget\n03: What makes a model?\n04: Evaluating models\n05: Feature engineering\n06: Tuning hyperparameters\n07: Wrapping up"
+  },
+  {
+    "objectID": "index.html#code",
+    "href": "index.html#code",
+    "title": "Machine learning with tidymodels",
+    "section": "Code",
+    "text": "Code\nQuarto files for working along are available on GitHub. (Don’t worry if you haven’t used Quarto before; it will feel familiar to R Markdown users.)"
+  },
+  {
+    "objectID": "index.html#acknowledgments",
+    "href": "index.html#acknowledgments",
+    "title": "Machine learning with tidymodels",
+    "section": "Acknowledgments",
+    "text": "Acknowledgments\n\nThis website, including the slides, is made with Quarto. Please submit an issue on the GitHub repo for this workshop if you find something that could be fixed or improved."
+  },
+  {
+    "objectID": "index.html#reuse-and-licensing",
+    "href": "index.html#reuse-and-licensing",
+    "title": "Machine learning with tidymodels",
+    "section": "Reuse and licensing",
+    "text": "Reuse and licensing\n\nUnless otherwise noted (i.e. not an original creation and reused from another source), these educational materials are licensed under Creative Commons Attribution CC BY-SA 4.0."
+  },
+  {
+    "objectID": "slides/01-introduction.html#who-are-you",
+    "href": "slides/01-introduction.html#who-are-you",
+    "title": "1 - Introduction",
+    "section": "Who are you?",
+    "text": "Who are you?\n\nYou can use the magrittr %>% or base R |> pipe\nYou are familiar with functions from dplyr, tidyr, ggplot2\nYou have exposure to basic statistical concepts\nYou do not need intermediate or expert familiarity with modeling or ML"
+  },
+  {
+    "objectID": "slides/01-introduction.html#who-am-i",
+    "href": "slides/01-introduction.html#who-am-i",
+    "title": "1 - Introduction",
+    "section": "Who am I?",
+    "text": "Who am I?\n\n\n\n\n @juliasilge\n @juliasilge\n youtube.com/juliasilge\n juliasilge.com\n\n\n\nMany thanks to RStudio tidymodels team, Alison Hill, and Allison Horst for their role in creating these materials!"
+  },
+  {
+    "objectID": "slides/01-introduction.html#plan-for-this-workshop",
+    "href": "slides/01-introduction.html#plan-for-this-workshop",
+    "title": "1 - Introduction",
+    "section": "Plan for this workshop",
+    "text": "Plan for this workshop\n\nYour data budget\nWhat makes a model\nEvaluating models\nFeature engineering\nTuning hyperparameters\nWrapping up!"
+  },
+  {
+    "objectID": "slides/01-introduction.html#what-is-machine-learning",
+    "href": "slides/01-introduction.html#what-is-machine-learning",
+    "title": "1 - Introduction",
+    "section": "What is machine learning?",
+    "text": "What is machine learning?\n\n\nhttps://xkcd.com/1838/"
+  },
+  {
+    "objectID": "slides/01-introduction.html#what-is-machine-learning-1",
+    "href": "slides/01-introduction.html#what-is-machine-learning-1",
+    "title": "1 - Introduction",
+    "section": "What is machine learning?",
+    "text": "What is machine learning?\n\n\nIllustration credit: https://vas3k.com/blog/machine_learning/"
+  },
+  {
+    "objectID": "slides/01-introduction.html#what-is-machine-learning-2",
+    "href": "slides/01-introduction.html#what-is-machine-learning-2",
+    "title": "1 - Introduction",
+    "section": "What is machine learning?",
+    "text": "What is machine learning?\n\n\nIllustration credit: https://vas3k.com/blog/machine_learning/"
+  },
+  {
+    "objectID": "slides/01-introduction.html#your-turn",
+    "href": "slides/01-introduction.html#your-turn",
+    "title": "1 - Introduction",
+    "section": "Your turn",
+    "text": "Your turn\n\n\nHow are statistics and machine learning related?\nHow are they similar? Different?\n\n\n\n03:00\n\n\n\n\nthe “two cultures”\nmodel first vs. data first\ninference vs. prediction"
+  },
+  {
+    "objectID": "slides/01-introduction.html#what-is-tidymodels",
+    "href": "slides/01-introduction.html#what-is-tidymodels",
+    "title": "1 - Introduction",
+    "section": "What is tidymodels? ",
+    "text": "What is tidymodels? \n\nlibrary(tidymodels)\n#> ── Attaching packages ──────────────────────────── tidymodels 1.0.0 ──\n#> ✔ broom        1.0.0     ✔ rsample      1.0.0\n#> ✔ dials        1.0.0     ✔ tibble       3.1.8\n#> ✔ dplyr        1.0.9     ✔ tidyr        1.2.0\n#> ✔ infer        1.0.2     ✔ tune         1.0.0\n#> ✔ modeldata    1.0.0     ✔ workflows    1.0.0\n#> ✔ parsnip      1.0.0     ✔ workflowsets 1.0.0\n#> ✔ purrr        0.3.4     ✔ yardstick    1.0.0\n#> ✔ recipes      1.0.1\n#> ── Conflicts ─────────────────────────────── tidymodels_conflicts() ──\n#> ✖ purrr::discard() masks scales::discard()\n#> ✖ dplyr::filter()  masks stats::filter()\n#> ✖ dplyr::lag()     masks stats::lag()\n#> ✖ recipes::step()  masks stats::step()\n#> • Use tidymodels_prefer() to resolve common conflicts."
+  },
+  {
+    "objectID": "slides/01-introduction.html#lets-install-some-packages",
+    "href": "slides/01-introduction.html#lets-install-some-packages",
+    "title": "1 - Introduction",
+    "section": "Let’s install some packages",
+    "text": "Let’s install some packages\n\ninstall.packages(c(\"doParallel\", \"ranger\", \"rpart\", \n                   \"rpart.plot\", \"tidymodels\", \"tidyverse\",\n                   \"vetiver\", \"xgboost\"))\n\n\n\nhttps://bit.ly/learn-tidymodels"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#abalone-ages",
+    "href": "slides/02-data-budget.html#abalone-ages",
+    "title": "2 - Your data budget",
+    "section": "Abalone ages",
+    "text": "Abalone ages\n\nAge of abalone can be determined by cutting the shell and counting the number of rings through a microscope\nCan other measurements be used to determine age?\nData from The Population Biology of Abalone (Haliotis species) in Tasmania. I. Blacklip Abalone (H. rubra) from the North Coast and the Islands of Bass Strait by Nash et al (1994)\n\n\nlibrary(tidymodels)\nlibrary(tidyverse)\n\nabalone <- read_csv(\"abalone.csv\")"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#abalone-ages-1",
+    "href": "slides/02-data-budget.html#abalone-ages-1",
+    "title": "2 - Your data budget",
+    "section": "Abalone ages",
+    "text": "Abalone ages\n\nN = 4177\nA numeric outcome, rings\nOther variables to use for prediction:\n\nsex is a nominal predictor\nshucked_weight and diameter are numeric predictors"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#abalone-ages-2",
+    "href": "slides/02-data-budget.html#abalone-ages-2",
+    "title": "2 - Your data budget",
+    "section": "Abalone ages",
+    "text": "Abalone ages\n\nabalone\n#> # A tibble: 4,177 × 9\n#>    sex    length diameter height whole_weight shucked_we…¹ visce…² shell…³ rings\n#>    <chr>   <dbl>    <dbl>  <dbl>        <dbl>        <dbl>   <dbl>   <dbl> <dbl>\n#>  1 male    0.455    0.365  0.095        0.514       0.224   0.101    0.15     15\n#>  2 male    0.35     0.265  0.09         0.226       0.0995  0.0485   0.07      7\n#>  3 female  0.53     0.42   0.135        0.677       0.256   0.142    0.21      9\n#>  4 male    0.44     0.365  0.125        0.516       0.216   0.114    0.155    10\n#>  5 infant  0.33     0.255  0.08         0.205       0.0895  0.0395   0.055     7\n#>  6 infant  0.425    0.3    0.095        0.352       0.141   0.0775   0.12      8\n#>  7 female  0.53     0.415  0.15         0.778       0.237   0.142    0.33     20\n#>  8 female  0.545    0.425  0.125        0.768       0.294   0.150    0.26     16\n#>  9 male    0.475    0.37   0.125        0.509       0.216   0.112    0.165     9\n#> 10 female  0.55     0.44   0.15         0.894       0.314   0.151    0.32     19\n#> # … with 4,167 more rows, and abbreviated variable names ¹​shucked_weight,\n#> #   ²​viscera_weight, ³​shell_weight\n#> # ℹ Use `print(n = ...)` to see more rows"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#data-splitting-and-spending",
+    "href": "slides/02-data-budget.html#data-splitting-and-spending",
+    "title": "2 - Your data budget",
+    "section": "Data splitting and spending",
+    "text": "Data splitting and spending\nFor machine learning, we typically split data into training and test sets:\n\n\nThe training set is used to estimate model parameters.\nThe test set is used to find an independent assessment of model performance.\n\n\n\nDo not 🚫 use the test set during training."
+  },
+  {
+    "objectID": "slides/02-data-budget.html#data-splitting-and-spending-1",
+    "href": "slides/02-data-budget.html#data-splitting-and-spending-1",
+    "title": "2 - Your data budget",
+    "section": "Data splitting and spending",
+    "text": "Data splitting and spending"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#section-1",
+    "href": "slides/02-data-budget.html#section-1",
+    "title": "2 - Your data budget",
+    "section": "",
+    "text": "The more data we spend 🤑\n\n\nthe better estimates we’ll get."
+  },
+  {
+    "objectID": "slides/02-data-budget.html#data-splitting-and-spending-2",
+    "href": "slides/02-data-budget.html#data-splitting-and-spending-2",
+    "title": "2 - Your data budget",
+    "section": "Data splitting and spending",
+    "text": "Data splitting and spending\n\n\nSpending too much data in training prevents us from computing a good assessment of predictive performance.\nSpending too much data in testing prevents us from computing a good estimate of model parameters."
+  },
+  {
+    "objectID": "slides/02-data-budget.html#your-turn",
+    "href": "slides/02-data-budget.html#your-turn",
+    "title": "2 - Your data budget",
+    "section": "Your turn",
+    "text": "Your turn\n\nWhen is a good time to split your data?\n\n\n\n03:00"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#data-splitting-and-spending-3",
+    "href": "slides/02-data-budget.html#data-splitting-and-spending-3",
+    "title": "2 - Your data budget",
+    "section": "Data splitting and spending ",
+    "text": "Data splitting and spending \n\nset.seed(123)\nring_split <- initial_split(abalone)\nring_split\n#> <Training/Testing/Total>\n#> <3132/1045/4177>\n\n\nHow much data in training vs testing? This function uses a good default, but this depends on your specific goal/data We will talk about more powerful ways of splitting, like stratification, later"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#accessing-the-data",
+    "href": "slides/02-data-budget.html#accessing-the-data",
+    "title": "2 - Your data budget",
+    "section": "Accessing the data ",
+    "text": "Accessing the data \n\nring_train <- training(ring_split)\nring_test <- testing(ring_split)"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#the-training-set",
+    "href": "slides/02-data-budget.html#the-training-set",
+    "title": "2 - Your data budget",
+    "section": "The training set",
+    "text": "The training set\n\nring_train\n#> # A tibble: 3,132 × 9\n#>    sex    length diameter height whole_weight shucked_we…¹ visce…² shell…³ rings\n#>    <chr>   <dbl>    <dbl>  <dbl>        <dbl>        <dbl>   <dbl>   <dbl> <dbl>\n#>  1 male    0.44     0.325  0.08         0.413       0.144   0.102   0.13       8\n#>  2 infant  0.42     0.32   0.1          0.34        0.174   0.05    0.0945     8\n#>  3 infant  0.355    0.28   0.11         0.224       0.0815  0.0525  0.08       7\n#>  4 male    0.175    0.125  0.04         0.024       0.0095  0.006   0.005      4\n#>  5 infant  0.535    0.4    0.135        0.775       0.368   0.208   0.206      8\n#>  6 infant  0.435    0.335  0.1          0.324       0.135   0.0785  0.098      7\n#>  7 infant  0.575    0.435  0.13         0.805       0.316   0.216   0.245     10\n#>  8 male    0.455    0.345  0.125        0.44        0.169   0.106   0.135     12\n#>  9 infant  0.495    0.4    0.145        0.578       0.254   0.130   0.164      8\n#> 10 female  0.57     0.45   0.135        0.780       0.334   0.185   0.21       8\n#> # … with 3,122 more rows, and abbreviated variable names ¹​shucked_weight,\n#> #   ²​viscera_weight, ³​shell_weight\n#> # ℹ Use `print(n = ...)` to see more rows"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#the-test-set",
+    "href": "slides/02-data-budget.html#the-test-set",
+    "title": "2 - Your data budget",
+    "section": "The test set ",
+    "text": "The test set \n\nring_test\n#> # A tibble: 1,045 × 9\n#>    sex    length diameter height whole_weight shucked_we…¹ visce…² shell…³ rings\n#>    <chr>   <dbl>    <dbl>  <dbl>        <dbl>        <dbl>   <dbl>   <dbl> <dbl>\n#>  1 female  0.53     0.42   0.135        0.677       0.256   0.142    0.21      9\n#>  2 infant  0.425    0.3    0.095        0.352       0.141   0.0775   0.12      8\n#>  3 female  0.535    0.405  0.145        0.684       0.272   0.171    0.205    10\n#>  4 infant  0.38     0.275  0.1          0.226       0.08    0.049    0.085    10\n#>  5 female  0.68     0.55   0.175        1.80        0.815   0.392    0.455    19\n#>  6 infant  0.24     0.175  0.045        0.07        0.0315  0.0235   0.02      5\n#>  7 male    0.47     0.37   0.12         0.580       0.293   0.227    0.14      9\n#>  8 female  0.525    0.425  0.16         0.836       0.354   0.214    0.245     9\n#>  9 male    0.485    0.36   0.13         0.542       0.260   0.096    0.16     10\n#> 10 male    0.445    0.35   0.12         0.442       0.192   0.0955   0.135     8\n#> # … with 1,035 more rows, and abbreviated variable names ¹​shucked_weight,\n#> #   ²​viscera_weight, ³​shell_weight\n#> # ℹ Use `print(n = ...)` to see more rows"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#your-turn-1",
+    "href": "slides/02-data-budget.html#your-turn-1",
+    "title": "2 - Your data budget",
+    "section": "Your turn",
+    "text": "Your turn\n\nSplit your data so 20% is held out for the test set.\nTry out different values in set.seed() to see how the results change.\n\n\n\n05:00"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#data-splitting-and-spending-4",
+    "href": "slides/02-data-budget.html#data-splitting-and-spending-4",
+    "title": "2 - Your data budget",
+    "section": "Data splitting and spending ",
+    "text": "Data splitting and spending \n\nset.seed(123)\nring_split <- initial_split(abalone, prop = 0.8)\nring_train <- training(ring_split)\nring_test <- testing(ring_split)\n\nnrow(ring_train)\n#> [1] 3341\nnrow(ring_test)\n#> [1] 836"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#your-turn-2",
+    "href": "slides/02-data-budget.html#your-turn-2",
+    "title": "2 - Your data budget",
+    "section": "Your turn",
+    "text": "Your turn\n\nExplore the ring_train data on your own!\n\nWhat’s the distribution of the outcome, rings?\nWhat’s the distribution of numeric variables like weight?\nHow do rings differ across sex?\n\n\n\n\n08:00\n\n\n\n\nMake a plot or summary and then share with neighbor"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#section-4",
+    "href": "slides/02-data-budget.html#section-4",
+    "title": "2 - Your data budget",
+    "section": "",
+    "text": "ggplot(ring_train, aes(rings)) +\n  geom_histogram(bins = 15)\n\n\n\n\n\n\n\n\n\nThis histogram brings up a concern. What if in our training set we get unlucky and sample few or none of these large values? That could mean that our model wouldn’t be able to predict such values. Let’s come back to that!"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#section-5",
+    "href": "slides/02-data-budget.html#section-5",
+    "title": "2 - Your data budget",
+    "section": "",
+    "text": "ggplot(ring_train, aes(rings, sex, fill = sex)) +\n  geom_boxplot(alpha = 0.5, show.legend = FALSE)"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#section-6",
+    "href": "slides/02-data-budget.html#section-6",
+    "title": "2 - Your data budget",
+    "section": "",
+    "text": "ring_train %>%\n  ggplot(aes(shucked_weight, rings, color = shell_weight)) +\n  geom_point(alpha = 0.5) +\n  scale_color_viridis_c()\n\n\n\nWe can transform our outcome before splitting."
+  },
+  {
+    "objectID": "slides/02-data-budget.html#section-7",
+    "href": "slides/02-data-budget.html#section-7",
+    "title": "2 - Your data budget",
+    "section": "",
+    "text": "Stratified sampling splits within each quartile\n\nBased on our exploration, we realized that stratifying by rings might help get a consistent distribution. For instance, we’d include high and low rings in both the test and training"
+  },
+  {
+    "objectID": "slides/02-data-budget.html#stratification",
+    "href": "slides/02-data-budget.html#stratification",
+    "title": "2 - Your data budget",
+    "section": "Stratification",
+    "text": "Stratification\nUse strata = rings\n\nset.seed(123)\nring_split <- initial_split(abalone, prop = 0.8, strata = rings)\nring_train <- training(ring_split)\nring_test <- testing(ring_split)\n\n\nStratification often helps, with very little downside\n\n\nhttps://bit.ly/learn-tidymodels"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#your-turn",
+    "href": "slides/03-what-makes-a-model.html#your-turn",
+    "title": "3 - What makes a model?",
+    "section": "Your turn",
+    "text": "Your turn\n\nHow do you fit a linear model in R?\nHow many different ways can you think of?\n\n\n\n03:00\n\n\n\n\n\nlm for linear model\nglmnet for regularized regression\nkeras for regression using TensorFlow\nstan for Bayesian regression\nspark for large data sets"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#section",
+    "href": "slides/03-what-makes-a-model.html#section",
+    "title": "3 - What makes a model?",
+    "section": "",
+    "text": "Artwork by @allison_horst"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#to-specify-a-model",
+    "href": "slides/03-what-makes-a-model.html#to-specify-a-model",
+    "title": "3 - What makes a model?",
+    "section": "To specify a model ",
+    "text": "To specify a model \n\nChoose a model\nSpecify an engine\nSet the mode"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#to-specify-a-model-1",
+    "href": "slides/03-what-makes-a-model.html#to-specify-a-model-1",
+    "title": "3 - What makes a model?",
+    "section": "To specify a model ",
+    "text": "To specify a model \n\n\n\n\nlinear_reg()\n#> Linear Regression Model Specification (regression)\n#> \n#> Computational engine: lm\n\n\nModels have default engines"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#to-specify-a-model-2",
+    "href": "slides/03-what-makes-a-model.html#to-specify-a-model-2",
+    "title": "3 - What makes a model?",
+    "section": "To specify a model ",
+    "text": "To specify a model \n\nChoose a model\nSpecify an engine\nSet the mode"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#to-specify-a-model-3",
+    "href": "slides/03-what-makes-a-model.html#to-specify-a-model-3",
+    "title": "3 - What makes a model?",
+    "section": "To specify a model ",
+    "text": "To specify a model \n\nlinear_reg() %>%\n  set_engine(\"glmnet\")\n#> Linear Regression Model Specification (regression)\n#> \n#> Computational engine: glmnet"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#to-specify-a-model-4",
+    "href": "slides/03-what-makes-a-model.html#to-specify-a-model-4",
+    "title": "3 - What makes a model?",
+    "section": "To specify a model ",
+    "text": "To specify a model \n\nlinear_reg() %>%\n  set_engine(\"stan\")\n#> Linear Regression Model Specification (regression)\n#> \n#> Computational engine: stan"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#to-specify-a-model-5",
+    "href": "slides/03-what-makes-a-model.html#to-specify-a-model-5",
+    "title": "3 - What makes a model?",
+    "section": "To specify a model ",
+    "text": "To specify a model \n\nChoose a model\nSpecify an engine\nSet the mode"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#to-specify-a-model-6",
+    "href": "slides/03-what-makes-a-model.html#to-specify-a-model-6",
+    "title": "3 - What makes a model?",
+    "section": "To specify a model ",
+    "text": "To specify a model \n\ndecision_tree()\n#> Decision Tree Model Specification (unknown)\n#> \n#> Computational engine: rpart\n\n\nSome models have a default mode"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#to-specify-a-model-7",
+    "href": "slides/03-what-makes-a-model.html#to-specify-a-model-7",
+    "title": "3 - What makes a model?",
+    "section": "To specify a model ",
+    "text": "To specify a model \n\ndecision_tree() %>% \n  set_mode(\"regression\")\n#> Decision Tree Model Specification (regression)\n#> \n#> Computational engine: rpart\n\n\n\n\nAll available models are listed at https://www.tidymodels.org/find/parsnip/"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#to-specify-a-model-8",
+    "href": "slides/03-what-makes-a-model.html#to-specify-a-model-8",
+    "title": "3 - What makes a model?",
+    "section": "To specify a model ",
+    "text": "To specify a model \n\nChoose a model\nSpecify an engine\nSet the mode"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#your-turn-1",
+    "href": "slides/03-what-makes-a-model.html#your-turn-1",
+    "title": "3 - What makes a model?",
+    "section": "Your turn",
+    "text": "Your turn\n\nRun the tree_spec chunk in your .qmd.\nEdit this code so it creates a different model, such as linear regression.\n\n\n\n05:00\n\n\n\n\n\nAll available models are listed at https://www.tidymodels.org/find/parsnip/\n\n\nDecision tree:\n\nSeries of splits or if/then statements based on predictors\nFirst the tree grows until some condition is met (maximum depth, no more data)\nThen the tree is pruned to reduce its complexity\n\nLinear regression:\n\nOutcome modeled as linear combination of predictors\nFind a line that minimizes the mean squared error (MSE)"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#workflows-bind-preprocessors-and-models",
+    "href": "slides/03-what-makes-a-model.html#workflows-bind-preprocessors-and-models",
+    "title": "3 - What makes a model?",
+    "section": "Workflows bind preprocessors and models",
+    "text": "Workflows bind preprocessors and models"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#what-is-wrong-with-this",
+    "href": "slides/03-what-makes-a-model.html#what-is-wrong-with-this",
+    "title": "3 - What makes a model?",
+    "section": "What is wrong with this?",
+    "text": "What is wrong with this?"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#why-a-workflow",
+    "href": "slides/03-what-makes-a-model.html#why-a-workflow",
+    "title": "3 - What makes a model?",
+    "section": "Why a workflow()? ",
+    "text": "Why a workflow()? \n\n\nYou can use other preprocessors besides formulas (more on feature engineering later!)\nThey can help organize your work when working with multiple models\nMost importantly, a workflow captures the entire modeling process: fit() and predict() apply to the preprocessing steps in addition to the actual model fit"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#a-model-workflow-1",
+    "href": "slides/03-what-makes-a-model.html#a-model-workflow-1",
+    "title": "3 - What makes a model?",
+    "section": "A model workflow  ",
+    "text": "A model workflow  \n\ntree_spec <- decision_tree(mode = \"regression\")\n\ntree_spec %>% \n  fit(rings ~ ., data = ring_train) \n#> parsnip model object\n#> \n#> n= 3340 \n#> \n#> node), split, n, deviance, yval\n#>       * denotes terminal node\n#> \n#>  1) root 3340 34681.9200  9.937425  \n#>    2) shell_weight< 0.16775 1146  5102.2900  7.584642  \n#>      4) shell_weight< 0.05325 242   484.3512  5.524793 *\n#>      5) shell_weight>=0.05325 904  3316.2640  8.136062  \n#>       10) sex=infant 557  1432.8580  7.565530 *\n#>       11) sex=female,male 347  1411.0660  9.051873 *\n#>    3) shell_weight>=0.16775 2194 19922.2800 11.166360  \n#>      6) shell_weight< 0.35775 1588 11128.8300 10.587530  \n#>       12) shell_weight< 0.24925 679  3807.1960  9.948454  \n#>         24) shucked_weight>=0.24775 528  1773.1650  9.460227 *\n#>         25) shucked_weight< 0.24775 151  1468.0930 11.655630 *\n#>       13) shell_weight>=0.24925 909  6837.1710 11.064910  \n#>         26) shucked_weight>=0.39975 620  2638.9340 10.372580 *\n#>         27) shucked_weight< 0.39975 289  3263.5220 12.550170 *\n#>      7) shell_weight>=0.35775 606  6867.1680 12.683170  \n#>       14) shucked_weight>=0.55025 429  3609.9910 12.004660  \n#>         28) shell_weight< 0.579 382  2243.0990 11.607330 *\n#>         29) shell_weight>=0.579 47   816.4255 15.234040 *\n#>       15) shucked_weight< 0.55025 177  2580.9940 14.327680 *"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#a-model-workflow-2",
+    "href": "slides/03-what-makes-a-model.html#a-model-workflow-2",
+    "title": "3 - What makes a model?",
+    "section": "A model workflow  ",
+    "text": "A model workflow  \n\ntree_spec <- decision_tree(mode = \"regression\")\n\nworkflow(rings ~ ., tree_spec) %>% \n  fit(data = ring_train) \n#> ══ Workflow [trained] ════════════════════════════════════════════════\n#> Preprocessor: Formula\n#> Model: decision_tree()\n#> \n#> ── Preprocessor ──────────────────────────────────────────────────────\n#> rings ~ .\n#> \n#> ── Model ─────────────────────────────────────────────────────────────\n#> n= 3340 \n#> \n#> node), split, n, deviance, yval\n#>       * denotes terminal node\n#> \n#>  1) root 3340 34681.9200  9.937425  \n#>    2) shell_weight< 0.16775 1146  5102.2900  7.584642  \n#>      4) shell_weight< 0.05325 242   484.3512  5.524793 *\n#>      5) shell_weight>=0.05325 904  3316.2640  8.136062  \n#>       10) sex=infant 557  1432.8580  7.565530 *\n#>       11) sex=female,male 347  1411.0660  9.051873 *\n#>    3) shell_weight>=0.16775 2194 19922.2800 11.166360  \n#>      6) shell_weight< 0.35775 1588 11128.8300 10.587530  \n#>       12) shell_weight< 0.24925 679  3807.1960  9.948454  \n#>         24) shucked_weight>=0.24775 528  1773.1650  9.460227 *\n#>         25) shucked_weight< 0.24775 151  1468.0930 11.655630 *\n#>       13) shell_weight>=0.24925 909  6837.1710 11.064910  \n#>         26) shucked_weight>=0.39975 620  2638.9340 10.372580 *\n#>         27) shucked_weight< 0.39975 289  3263.5220 12.550170 *\n#>      7) shell_weight>=0.35775 606  6867.1680 12.683170  \n#>       14) shucked_weight>=0.55025 429  3609.9910 12.004660  \n#>         28) shell_weight< 0.579 382  2243.0990 11.607330 *\n#>         29) shell_weight>=0.579 47   816.4255 15.234040 *\n#>       15) shucked_weight< 0.55025 177  2580.9940 14.327680 *"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#your-turn-2",
+    "href": "slides/03-what-makes-a-model.html#your-turn-2",
+    "title": "3 - What makes a model?",
+    "section": "Your turn",
+    "text": "Your turn\n\nRun the tree_wflow chunk in your .qmd.\nEdit this code so it uses a linear model.\n\n\n\n05:00"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#predict-with-your-model",
+    "href": "slides/03-what-makes-a-model.html#predict-with-your-model",
+    "title": "3 - What makes a model?",
+    "section": "Predict with your model  ",
+    "text": "Predict with your model  \nHow do you use your new tree_fit model?\n\ntree_spec <- decision_tree(mode = \"regression\")\n\ntree_fit <-\n  workflow(rings ~ ., tree_spec) %>% \n  fit(data = ring_train)"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#your-turn-3",
+    "href": "slides/03-what-makes-a-model.html#your-turn-3",
+    "title": "3 - What makes a model?",
+    "section": "Your turn",
+    "text": "Your turn\n\nRun:\npredict(tree_fit, new_data = ring_test)\nWhat do you get?\n\n\n\n03:00"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#your-turn-4",
+    "href": "slides/03-what-makes-a-model.html#your-turn-4",
+    "title": "3 - What makes a model?",
+    "section": "Your turn",
+    "text": "Your turn\n\nRun:\naugment(tree_fit, new_data = ring_test)\nWhat do you get?\n\n\n\n03:00"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#understand-your-model",
+    "href": "slides/03-what-makes-a-model.html#understand-your-model",
+    "title": "3 - What makes a model?",
+    "section": "Understand your model  ",
+    "text": "Understand your model  \nHow do you understand your new tree_fit model?\n\nYou can use your fitted workflow for model and/or prediction explanations:\n\n\noverall variable importance, such as with the vip package\nflexible model explainers, such as with the DALEXtra package\n\n\n\n\nLearn more at https://www.tmwr.org/explain.html"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#understand-your-model-1",
+    "href": "slides/03-what-makes-a-model.html#understand-your-model-1",
+    "title": "3 - What makes a model?",
+    "section": "Understand your model  ",
+    "text": "Understand your model  \nHow do you understand your new tree_fit model?"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#understand-your-model-2",
+    "href": "slides/03-what-makes-a-model.html#understand-your-model-2",
+    "title": "3 - What makes a model?",
+    "section": "Understand your model  ",
+    "text": "Understand your model  \nHow do you understand your new tree_fit model?\n\nlibrary(rpart.plot)\ntree_fit %>%\n  extract_fit_engine() %>%\n  rpart.plot()\n\nYou can extract_*() several components of your fitted workflow: https://workflows.tidymodels.org/reference/extract-workflow.html\n\n⚠️ Never predict() with any extracted components!"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#deploy-your-model",
+    "href": "slides/03-what-makes-a-model.html#deploy-your-model",
+    "title": "3 - What makes a model?",
+    "section": "Deploy your model ",
+    "text": "Deploy your model \nHow do you use your new tree_fit model in production?\n\nlibrary(vetiver)\nv <- vetiver_model(tree_fit, \"abalone-rings\")\nv\n#> \n#> ── abalone-rings ─ <butchered_workflow> model for deployment \n#> A rpart regression modeling workflow using 8 features\n\nLearn more at https://vetiver.rstudio.com"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#deploy-your-model-1",
+    "href": "slides/03-what-makes-a-model.html#deploy-your-model-1",
+    "title": "3 - What makes a model?",
+    "section": "Deploy your model ",
+    "text": "Deploy your model \nHow do you use your new model tree_fit in production?\n\nlibrary(plumber)\npr() %>%\n  vetiver_api(v)\n#> # Plumber router with 2 endpoints, 4 filters, and 1 sub-router.\n#> # Use `pr_run()` on this object to start the API.\n#> ├──[queryString]\n#> ├──[body]\n#> ├──[cookieParser]\n#> ├──[sharedSecret]\n#> ├──/logo\n#> │  │ # Plumber static router serving from directory: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/vetiver\n#> ├──/ping (GET)\n#> └──/predict (POST)\n\nLearn more at https://vetiver.rstudio.com"
+  },
+  {
+    "objectID": "slides/03-what-makes-a-model.html#your-turn-5",
+    "href": "slides/03-what-makes-a-model.html#your-turn-5",
+    "title": "3 - What makes a model?",
+    "section": "Your turn",
+    "text": "Your turn\n\nRun the vetiver chunk in your .qmd.\nCheck out the automated visual documentation.\n\n\n\n05:00\n\n\n\n\n\nhttps://bit.ly/learn-tidymodels"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#metrics-for-model-performance",
+    "href": "slides/04-evaluating-models.html#metrics-for-model-performance",
+    "title": "4 - Evaluating models",
+    "section": "Metrics for model performance ",
+    "text": "Metrics for model performance \n\n\n\n\naugment(tree_fit, new_data = ring_test) %>%\n  metrics(rings, .pred)\n#> # A tibble: 3 × 3\n#>   .metric .estimator .estimate\n#>   <chr>   <chr>          <dbl>\n#> 1 rmse    standard       2.31 \n#> 2 rsq     standard       0.508\n#> 3 mae     standard       1.62\n\n\n\nRMSE: difference between the predicted and observed values ⬇️\n\\(R^2\\): squared correlation between the predicted and observed values ⬆️\nMAE: similar to RMSE, but mean absolute error ⬇️"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#metrics-for-model-performance-1",
+    "href": "slides/04-evaluating-models.html#metrics-for-model-performance-1",
+    "title": "4 - Evaluating models",
+    "section": "Metrics for model performance ",
+    "text": "Metrics for model performance \n\naugment(tree_fit, new_data = ring_test) %>%\n  rmse(rings, .pred)\n#> # A tibble: 1 × 3\n#>   .metric .estimator .estimate\n#>   <chr>   <chr>          <dbl>\n#> 1 rmse    standard        2.31"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#metrics-for-model-performance-2",
+    "href": "slides/04-evaluating-models.html#metrics-for-model-performance-2",
+    "title": "4 - Evaluating models",
+    "section": "Metrics for model performance ",
+    "text": "Metrics for model performance \n\naugment(tree_fit, new_data = ring_test) %>%\n  group_by(sex) %>%\n  rmse(rings, .pred)\n#> # A tibble: 3 × 4\n#>   sex    .metric .estimator .estimate\n#>   <fct>  <chr>   <chr>          <dbl>\n#> 1 female rmse    standard        2.56\n#> 2 infant rmse    standard        1.96\n#> 3 male   rmse    standard        2.39"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#metrics-for-model-performance-3",
+    "href": "slides/04-evaluating-models.html#metrics-for-model-performance-3",
+    "title": "4 - Evaluating models",
+    "section": "Metrics for model performance ",
+    "text": "Metrics for model performance \n\nabalone_metrics <- metric_set(rmse, mape)\naugment(tree_fit, new_data = ring_test) %>%\n  abalone_metrics(rings, .pred)\n#> # A tibble: 2 × 3\n#>   .metric .estimator .estimate\n#>   <chr>   <chr>          <dbl>\n#> 1 rmse    standard        2.31\n#> 2 mape    standard       16.3"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#section-1",
+    "href": "slides/04-evaluating-models.html#section-1",
+    "title": "4 - Evaluating models",
+    "section": "",
+    "text": "⚠️ DANGERS OF OVERFITTING ⚠️"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#dangers-of-overfitting",
+    "href": "slides/04-evaluating-models.html#dangers-of-overfitting",
+    "title": "4 - Evaluating models",
+    "section": "Dangers of overfitting ⚠️",
+    "text": "Dangers of overfitting ⚠️"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#dangers-of-overfitting-1",
+    "href": "slides/04-evaluating-models.html#dangers-of-overfitting-1",
+    "title": "4 - Evaluating models",
+    "section": "Dangers of overfitting ⚠️",
+    "text": "Dangers of overfitting ⚠️"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#dangers-of-overfitting-2",
+    "href": "slides/04-evaluating-models.html#dangers-of-overfitting-2",
+    "title": "4 - Evaluating models",
+    "section": "Dangers of overfitting ⚠️ ",
+    "text": "Dangers of overfitting ⚠️ \n\ntree_fit %>%\n  augment(ring_train)\n#> # A tibble: 3,340 × 10\n#>    sex    length diameter height whole_wei…¹ shuck…² visce…³ shell…⁴ rings .pred\n#>    <fct>   <dbl>    <dbl>  <dbl>       <dbl>   <dbl>   <dbl>   <dbl> <dbl> <dbl>\n#>  1 male    0.35     0.265  0.09        0.226  0.0995  0.0485   0.07      7  8.70\n#>  2 infant  0.33     0.255  0.08        0.205  0.0895  0.0395   0.055     7  7.04\n#>  3 infant  0.355    0.28   0.085       0.290  0.095   0.0395   0.115     7  8.41\n#>  4 male    0.365    0.295  0.08        0.256  0.097   0.043    0.1       7  8.70\n#>  5 male    0.465    0.355  0.105       0.480  0.227   0.124    0.125     8  8.92\n#>  6 female  0.45     0.355  0.105       0.522  0.237   0.116    0.145     8  8.92\n#>  7 infant  0.24     0.175  0.045       0.07   0.0315  0.0235   0.02      5  4.5 \n#>  8 infant  0.205    0.15   0.055       0.042  0.0255  0.015    0.012     5  4.5 \n#>  9 infant  0.21     0.15   0.05        0.042  0.0175  0.0125   0.015     4  4.5 \n#> 10 infant  0.39     0.295  0.095       0.203  0.0875  0.045    0.075     7  7.04\n#> # … with 3,330 more rows, and abbreviated variable names ¹​whole_weight,\n#> #   ²​shucked_weight, ³​viscera_weight, ⁴​shell_weight\n#> # ℹ Use `print(n = ...)` to see more rows\n\nWe call this “resubstitution” or “repredicting the training set”"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#dangers-of-overfitting-3",
+    "href": "slides/04-evaluating-models.html#dangers-of-overfitting-3",
+    "title": "4 - Evaluating models",
+    "section": "Dangers of overfitting ⚠️ ",
+    "text": "Dangers of overfitting ⚠️ \n\ntree_fit %>%\n  augment(ring_train) %>%\n  rmse(rings, .pred)\n#> # A tibble: 1 × 3\n#>   .metric .estimator .estimate\n#>   <chr>   <chr>          <dbl>\n#> 1 rmse    standard        1.91\n\nWe call this a “resubstitution estimate”"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#dangers-of-overfitting-4",
+    "href": "slides/04-evaluating-models.html#dangers-of-overfitting-4",
+    "title": "4 - Evaluating models",
+    "section": "Dangers of overfitting ⚠️ ",
+    "text": "Dangers of overfitting ⚠️ \n\n\n\ntree_fit %>%\n  augment(ring_train) %>%\n  rmse(rings, .pred)\n#> # A tibble: 1 × 3\n#>   .metric .estimator .estimate\n#>   <chr>   <chr>          <dbl>\n#> 1 rmse    standard        1.91"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#dangers-of-overfitting-5",
+    "href": "slides/04-evaluating-models.html#dangers-of-overfitting-5",
+    "title": "4 - Evaluating models",
+    "section": "Dangers of overfitting ⚠️ ",
+    "text": "Dangers of overfitting ⚠️ \n\n\n\ntree_fit %>%\n  augment(ring_train) %>%\n  rmse(rings, .pred)\n#> # A tibble: 1 × 3\n#>   .metric .estimator .estimate\n#>   <chr>   <chr>          <dbl>\n#> 1 rmse    standard        1.91\n\n\n\ntree_fit %>%\n  augment(ring_test) %>%\n  rmse(rings, .pred)\n#> # A tibble: 1 × 3\n#>   .metric .estimator .estimate\n#>   <chr>   <chr>          <dbl>\n#> 1 rmse    standard        2.31\n\n\n\n\n⚠️ Remember that we’re demonstrating overfitting\n\n\n⚠️ Don’t use the test set until the end of your modeling analysis"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#your-turn",
+    "href": "slides/04-evaluating-models.html#your-turn",
+    "title": "4 - Evaluating models",
+    "section": "Your turn",
+    "text": "Your turn\n\nUse augment() to compute a regression metric like mae().\nCompute the metrics for both training and testing data.\nNotice the evidence of overfitting! ⚠️\n\n\n\n05:00"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#dangers-of-overfitting-6",
+    "href": "slides/04-evaluating-models.html#dangers-of-overfitting-6",
+    "title": "4 - Evaluating models",
+    "section": "Dangers of overfitting ⚠️ ",
+    "text": "Dangers of overfitting ⚠️ \n\n\n\ntree_fit %>%\n  augment(ring_train) %>%\n  mae(rings, .pred)\n#> # A tibble: 1 × 3\n#>   .metric .estimator .estimate\n#>   <chr>   <chr>          <dbl>\n#> 1 mae     standard        1.37\n\n\n\ntree_fit %>%\n  augment(ring_test) %>%\n  mae(rings, .pred)\n#> # A tibble: 1 × 3\n#>   .metric .estimator .estimate\n#>   <chr>   <chr>          <dbl>\n#> 1 mae     standard        1.62\n\n\n\n\n\nWhat if we want to compare more models?\nAnd/or more model configurations?\nAnd we want to understand if these are important differences?"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#cross-validation",
+    "href": "slides/04-evaluating-models.html#cross-validation",
+    "title": "4 - Evaluating models",
+    "section": "Cross-validation",
+    "text": "Cross-validation"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#cross-validation-1",
+    "href": "slides/04-evaluating-models.html#cross-validation-1",
+    "title": "4 - Evaluating models",
+    "section": "Cross-validation",
+    "text": "Cross-validation"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#your-turn-1",
+    "href": "slides/04-evaluating-models.html#your-turn-1",
+    "title": "4 - Evaluating models",
+    "section": "Your turn",
+    "text": "Your turn\n\nIf we use 10 folds, what percent of the training data\n\nends up in analysis\nends up in assessment\n\nfor each fold?\n\n\n\n03:00"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#cross-validation-2",
+    "href": "slides/04-evaluating-models.html#cross-validation-2",
+    "title": "4 - Evaluating models",
+    "section": "Cross-validation ",
+    "text": "Cross-validation \n\nvfold_cv(ring_train) # v = 10 is default\n#> #  10-fold cross-validation \n#> # A tibble: 10 × 2\n#>    splits             id    \n#>    <list>             <chr> \n#>  1 <split [3006/334]> Fold01\n#>  2 <split [3006/334]> Fold02\n#>  3 <split [3006/334]> Fold03\n#>  4 <split [3006/334]> Fold04\n#>  5 <split [3006/334]> Fold05\n#>  6 <split [3006/334]> Fold06\n#>  7 <split [3006/334]> Fold07\n#>  8 <split [3006/334]> Fold08\n#>  9 <split [3006/334]> Fold09\n#> 10 <split [3006/334]> Fold10"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#cross-validation-3",
+    "href": "slides/04-evaluating-models.html#cross-validation-3",
+    "title": "4 - Evaluating models",
+    "section": "Cross-validation ",
+    "text": "Cross-validation \nWhat is in this?\n\nring_folds <- vfold_cv(ring_train)\nring_folds$splits[1:3]\n#> [[1]]\n#> <Analysis/Assess/Total>\n#> <3006/334/3340>\n#> \n#> [[2]]\n#> <Analysis/Assess/Total>\n#> <3006/334/3340>\n#> \n#> [[3]]\n#> <Analysis/Assess/Total>\n#> <3006/334/3340>\n\n\nTalk about a list column, storing non-atomic types in dataframe"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#cross-validation-4",
+    "href": "slides/04-evaluating-models.html#cross-validation-4",
+    "title": "4 - Evaluating models",
+    "section": "Cross-validation ",
+    "text": "Cross-validation \n\nvfold_cv(ring_train, v = 5)\n#> #  5-fold cross-validation \n#> # A tibble: 5 × 2\n#>   splits             id   \n#>   <list>             <chr>\n#> 1 <split [2672/668]> Fold1\n#> 2 <split [2672/668]> Fold2\n#> 3 <split [2672/668]> Fold3\n#> 4 <split [2672/668]> Fold4\n#> 5 <split [2672/668]> Fold5"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#cross-validation-5",
+    "href": "slides/04-evaluating-models.html#cross-validation-5",
+    "title": "4 - Evaluating models",
+    "section": "Cross-validation ",
+    "text": "Cross-validation \n\nvfold_cv(ring_train, strata = rings)\n#> #  10-fold cross-validation using stratification \n#> # A tibble: 10 × 2\n#>    splits             id    \n#>    <list>             <chr> \n#>  1 <split [3004/336]> Fold01\n#>  2 <split [3005/335]> Fold02\n#>  3 <split [3005/335]> Fold03\n#>  4 <split [3005/335]> Fold04\n#>  5 <split [3005/335]> Fold05\n#>  6 <split [3006/334]> Fold06\n#>  7 <split [3007/333]> Fold07\n#>  8 <split [3007/333]> Fold08\n#>  9 <split [3008/332]> Fold09\n#> 10 <split [3008/332]> Fold10\n\n\nStratification often helps, with very little downside"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#cross-validation-6",
+    "href": "slides/04-evaluating-models.html#cross-validation-6",
+    "title": "4 - Evaluating models",
+    "section": "Cross-validation ",
+    "text": "Cross-validation \nWe’ll use this setup:\n\nset.seed(234)\nring_folds <- vfold_cv(ring_train, v = 5, strata = rings)\nring_folds\n#> #  5-fold cross-validation using stratification \n#> # A tibble: 5 × 2\n#>   splits             id   \n#>   <list>             <chr>\n#> 1 <split [2670/670]> Fold1\n#> 2 <split [2672/668]> Fold2\n#> 3 <split [2672/668]> Fold3\n#> 4 <split [2673/667]> Fold4\n#> 5 <split [2673/667]> Fold5\n\n\nSet the seed when creating resamples"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#fit-our-model-to-the-resamples",
+    "href": "slides/04-evaluating-models.html#fit-our-model-to-the-resamples",
+    "title": "4 - Evaluating models",
+    "section": "Fit our model to the resamples",
+    "text": "Fit our model to the resamples\n\ntree_res <- fit_resamples(tree_wflow, ring_folds)\ntree_res\n#> # Resampling results\n#> # 5-fold cross-validation using stratification \n#> # A tibble: 5 × 4\n#>   splits             id    .metrics         .notes          \n#>   <list>             <chr> <list>           <list>          \n#> 1 <split [2670/670]> Fold1 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 2 <split [2672/668]> Fold2 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 3 <split [2672/668]> Fold3 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 4 <split [2673/667]> Fold4 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 5 <split [2673/667]> Fold5 <tibble [2 × 4]> <tibble [0 × 3]>"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#evaluating-model-performance",
+    "href": "slides/04-evaluating-models.html#evaluating-model-performance",
+    "title": "4 - Evaluating models",
+    "section": "Evaluating model performance ",
+    "text": "Evaluating model performance \n\ntree_res %>%\n  collect_metrics()\n#> # A tibble: 2 × 6\n#>   .metric .estimator  mean     n std_err .config             \n#>   <chr>   <chr>      <dbl> <int>   <dbl> <chr>               \n#> 1 rmse    standard   2.43      5  0.0582 Preprocessor1_Model1\n#> 2 rsq     standard   0.452     5  0.0158 Preprocessor1_Model1\n\n\nWe can reliably measure performance using only the training data 🎉"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#comparing-metrics",
+    "href": "slides/04-evaluating-models.html#comparing-metrics",
+    "title": "4 - Evaluating models",
+    "section": "Comparing metrics ",
+    "text": "Comparing metrics \nHow do the metrics from resampling compare to the metrics from training and testing?\n\n\n\n\n\n\ntree_res %>%\n  collect_metrics() %>% \n  select(.metric, mean, std_err)\n#> # A tibble: 2 × 3\n#>   .metric  mean std_err\n#>   <chr>   <dbl>   <dbl>\n#> 1 rmse    2.43   0.0582\n#> 2 rsq     0.452  0.0158\n\n\nThe RMSE previously was\n\n1.91 for the training set\n2.31 for test set\n\n\n\n\nRemember that:\n⚠️ the training set gives you overly optimistic metrics\n⚠️ the test set is precious"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#evaluating-model-performance-1",
+    "href": "slides/04-evaluating-models.html#evaluating-model-performance-1",
+    "title": "4 - Evaluating models",
+    "section": "Evaluating model performance ",
+    "text": "Evaluating model performance \n\n# save the assessment set results\nctrl_abalone <- control_resamples(save_pred = TRUE)\ntree_res <- fit_resamples(tree_wflow, ring_folds, control = ctrl_abalone)\n\ntree_preds <- collect_predictions(tree_res)\ntree_preds\n#> # A tibble: 3,340 × 5\n#>    id    .pred  .row rings .config             \n#>    <chr> <dbl> <int> <dbl> <chr>               \n#>  1 Fold1  7.79     1     7 Preprocessor1_Model1\n#>  2 Fold1  8.39     3     7 Preprocessor1_Model1\n#>  3 Fold1  7.06    10     7 Preprocessor1_Model1\n#>  4 Fold1  9.92    23     7 Preprocessor1_Model1\n#>  5 Fold1  9.93    24     8 Preprocessor1_Model1\n#>  6 Fold1  7.06    25     7 Preprocessor1_Model1\n#>  7 Fold1  7.06    30     8 Preprocessor1_Model1\n#>  8 Fold1  8.74    34     8 Preprocessor1_Model1\n#>  9 Fold1  9.47    38     8 Preprocessor1_Model1\n#> 10 Fold1  4.36    39     5 Preprocessor1_Model1\n#> # … with 3,330 more rows\n#> # ℹ Use `print(n = ...)` to see more rows"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#section-4",
+    "href": "slides/04-evaluating-models.html#section-4",
+    "title": "4 - Evaluating models",
+    "section": "",
+    "text": "tree_preds %>% \n  ggplot(aes(rings, .pred, color = id)) + \n  geom_abline(lty = 2, col = \"gray\", size = 1.5) +\n  geom_point(alpha = 0.5) +\n  coord_obs_pred()"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#evaluating-model-performance-2",
+    "href": "slides/04-evaluating-models.html#evaluating-model-performance-2",
+    "title": "4 - Evaluating models",
+    "section": "Evaluating model performance ",
+    "text": "Evaluating model performance \n\ntree_res\n#> # Resampling results\n#> # 5-fold cross-validation using stratification \n#> # A tibble: 5 × 5\n#>   splits             id    .metrics         .notes           .predictions      \n#>   <list>             <chr> <list>           <list>           <list>            \n#> 1 <split [2670/670]> Fold1 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [670 × 4]>\n#> 2 <split [2672/668]> Fold2 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [668 × 4]>\n#> 3 <split [2672/668]> Fold3 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [668 × 4]>\n#> 4 <split [2673/667]> Fold4 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [667 × 4]>\n#> 5 <split [2673/667]> Fold5 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [667 × 4]>\n\nWhere are the fitted models??!??"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#evaluating-model-performance-3",
+    "href": "slides/04-evaluating-models.html#evaluating-model-performance-3",
+    "title": "4 - Evaluating models",
+    "section": "Evaluating model performance ",
+    "text": "Evaluating model performance \n\ntree_res\n#> # Resampling results\n#> # 5-fold cross-validation using stratification \n#> # A tibble: 5 × 5\n#>   splits             id    .metrics         .notes           .predictions      \n#>   <list>             <chr> <list>           <list>           <list>            \n#> 1 <split [2670/670]> Fold1 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [670 × 4]>\n#> 2 <split [2672/668]> Fold2 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [668 × 4]>\n#> 3 <split [2672/668]> Fold3 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [668 × 4]>\n#> 4 <split [2673/667]> Fold4 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [667 × 4]>\n#> 5 <split [2673/667]> Fold5 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [667 × 4]>\n\nWhere are the fitted models??!?? 🗑️\n\nFor more advanced use cases, you can extract and save them."
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#parallel-processing",
+    "href": "slides/04-evaluating-models.html#parallel-processing",
+    "title": "4 - Evaluating models",
+    "section": "Parallel processing",
+    "text": "Parallel processing\n\nResampling can involve fitting a lot of models!\nThese models don’t depend on one another and can be run in parallel\n\n\nWe can use a parallel backend to do this:\n\n\n\ncores <- \n  parallel::detectCores(logical = FALSE)\ncl <- parallel::makePSOCKcluster(cores)\ndoParallel::registerDoParallel(cl)\n\n# Now call `fit_resamples()`!\n\n# Shut it down with:\nforeach::registerDoSEQ()\nparallel::stopCluster(cl)\n\n\n\ndoParallel::registerDoParallel()\n\n# Now call `fit_resamples()`!"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#bootstrapping",
+    "href": "slides/04-evaluating-models.html#bootstrapping",
+    "title": "4 - Evaluating models",
+    "section": "Bootstrapping",
+    "text": "Bootstrapping"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#bootstrapping-1",
+    "href": "slides/04-evaluating-models.html#bootstrapping-1",
+    "title": "4 - Evaluating models",
+    "section": "Bootstrapping ",
+    "text": "Bootstrapping \n\nset.seed(123)\nbootstraps(ring_train)\n#> # Bootstrap sampling \n#> # A tibble: 25 × 2\n#>    splits              id         \n#>    <list>              <chr>      \n#>  1 <split [3340/1213]> Bootstrap01\n#>  2 <split [3340/1230]> Bootstrap02\n#>  3 <split [3340/1233]> Bootstrap03\n#>  4 <split [3340/1232]> Bootstrap04\n#>  5 <split [3340/1207]> Bootstrap05\n#>  6 <split [3340/1219]> Bootstrap06\n#>  7 <split [3340/1242]> Bootstrap07\n#>  8 <split [3340/1218]> Bootstrap08\n#>  9 <split [3340/1234]> Bootstrap09\n#> 10 <split [3340/1237]> Bootstrap10\n#> # … with 15 more rows\n#> # ℹ Use `print(n = ...)` to see more rows"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#your-turn-2",
+    "href": "slides/04-evaluating-models.html#your-turn-2",
+    "title": "4 - Evaluating models",
+    "section": "Your turn",
+    "text": "Your turn\n\nCreate:\n\nbootstrap folds (change times from the default)\nvalidation set (use the reference guide to find the function)\n\nDon’t forget to set a seed when you resample!\n\n\n\n05:00"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#bootstrapping-2",
+    "href": "slides/04-evaluating-models.html#bootstrapping-2",
+    "title": "4 - Evaluating models",
+    "section": "Bootstrapping ",
+    "text": "Bootstrapping \n\nset.seed(322)\nbootstraps(ring_train, times = 10)\n#> # Bootstrap sampling \n#> # A tibble: 10 × 2\n#>    splits              id         \n#>    <list>              <chr>      \n#>  1 <split [3340/1217]> Bootstrap01\n#>  2 <split [3340/1230]> Bootstrap02\n#>  3 <split [3340/1269]> Bootstrap03\n#>  4 <split [3340/1221]> Bootstrap04\n#>  5 <split [3340/1254]> Bootstrap05\n#>  6 <split [3340/1224]> Bootstrap06\n#>  7 <split [3340/1200]> Bootstrap07\n#>  8 <split [3340/1200]> Bootstrap08\n#>  9 <split [3340/1224]> Bootstrap09\n#> 10 <split [3340/1220]> Bootstrap10"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#validation-set",
+    "href": "slides/04-evaluating-models.html#validation-set",
+    "title": "4 - Evaluating models",
+    "section": "Validation set ",
+    "text": "Validation set \n\nset.seed(853)\nvalidation_split(ring_train, strata = rings)\n#> # Validation Set Split (0.75/0.25)  using stratification \n#> # A tibble: 1 × 2\n#>   splits             id        \n#>   <list>             <chr>     \n#> 1 <split [2504/836]> validation\n\n\nA validation set is just another type of resample"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#random-forest-1",
+    "href": "slides/04-evaluating-models.html#random-forest-1",
+    "title": "4 - Evaluating models",
+    "section": "Random forest 🌳🌲🌴🌵🌳🌳🌴🌲🌵🌴🌳🌵",
+    "text": "Random forest 🌳🌲🌴🌵🌳🌳🌴🌲🌵🌴🌳🌵\n\nEnsemble many decision tree models\nAll the trees vote! 🗳️\nBootstrap aggregating + random predictor sampling\n\n\nRandom forest often works well without tuning hyperparameters (more on this later!), as long as there are enough trees"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#create-a-random-forest-model",
+    "href": "slides/04-evaluating-models.html#create-a-random-forest-model",
+    "title": "4 - Evaluating models",
+    "section": "Create a random forest model ",
+    "text": "Create a random forest model \n\nrf_spec <- rand_forest(trees = 1000, mode = \"regression\")\nrf_spec\n#> Random Forest Model Specification (regression)\n#> \n#> Main Arguments:\n#>   trees = 1000\n#> \n#> Computational engine: ranger"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#create-a-random-forest-model-1",
+    "href": "slides/04-evaluating-models.html#create-a-random-forest-model-1",
+    "title": "4 - Evaluating models",
+    "section": "Create a random forest model ",
+    "text": "Create a random forest model \n\nrf_wflow <- workflow(rings ~ ., rf_spec)\nrf_wflow\n#> ══ Workflow ══════════════════════════════════════════════════════════\n#> Preprocessor: Formula\n#> Model: rand_forest()\n#> \n#> ── Preprocessor ──────────────────────────────────────────────────────\n#> rings ~ .\n#> \n#> ── Model ─────────────────────────────────────────────────────────────\n#> Random Forest Model Specification (regression)\n#> \n#> Main Arguments:\n#>   trees = 1000\n#> \n#> Computational engine: ranger"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#your-turn-3",
+    "href": "slides/04-evaluating-models.html#your-turn-3",
+    "title": "4 - Evaluating models",
+    "section": "Your turn",
+    "text": "Your turn\n\nUse fit_resamples() and rf_wflow to:\n\nkeep predictions\ncompute metrics\nplot true vs. predicted values\n\n\n\n\n08:00"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#evaluating-model-performance-4",
+    "href": "slides/04-evaluating-models.html#evaluating-model-performance-4",
+    "title": "4 - Evaluating models",
+    "section": "Evaluating model performance ",
+    "text": "Evaluating model performance \n\nctrl_abalone <- control_resamples(save_pred = TRUE)\n\n# random forest uses random numbers so set the seed first\n\nset.seed(2)\nrf_res <- fit_resamples(rf_wflow, ring_folds, control = ctrl_abalone)\ncollect_metrics(rf_res)\n#> # A tibble: 2 × 6\n#>   .metric .estimator  mean     n std_err .config             \n#>   <chr>   <chr>      <dbl> <int>   <dbl> <chr>               \n#> 1 rmse    standard   2.17      5  0.0622 Preprocessor1_Model1\n#> 2 rsq     standard   0.548     5  0.0153 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#section-6",
+    "href": "slides/04-evaluating-models.html#section-6",
+    "title": "4 - Evaluating models",
+    "section": "",
+    "text": "collect_predictions(rf_res) %>% \n  ggplot(aes(rings, .pred, color = id)) + \n  geom_abline(lty = 2, col = \"gray\", size = 1.5) +\n  geom_point(alpha = 0.5) +\n  coord_obs_pred()"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#evaluate-a-workflow-set",
+    "href": "slides/04-evaluating-models.html#evaluate-a-workflow-set",
+    "title": "4 - Evaluating models",
+    "section": "Evaluate a workflow set",
+    "text": "Evaluate a workflow set\n\nworkflow_set(list(rings ~ .), list(tree_spec, rf_spec))\n#> # A workflow set/tibble: 2 × 4\n#>   wflow_id              info             option    result    \n#>   <chr>                 <list>           <list>    <list>    \n#> 1 formula_decision_tree <tibble [1 × 4]> <opts[0]> <list [0]>\n#> 2 formula_rand_forest   <tibble [1 × 4]> <opts[0]> <list [0]>"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#evaluate-a-workflow-set-1",
+    "href": "slides/04-evaluating-models.html#evaluate-a-workflow-set-1",
+    "title": "4 - Evaluating models",
+    "section": "Evaluate a workflow set",
+    "text": "Evaluate a workflow set\n\nworkflow_set(list(rings ~ .), list(tree_spec, rf_spec)) %>%\n  workflow_map(\"fit_resamples\", resamples = ring_folds)\n#> # A workflow set/tibble: 2 × 4\n#>   wflow_id              info             option    result   \n#>   <chr>                 <list>           <list>    <list>   \n#> 1 formula_decision_tree <tibble [1 × 4]> <opts[1]> <rsmp[+]>\n#> 2 formula_rand_forest   <tibble [1 × 4]> <opts[1]> <rsmp[+]>"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#evaluate-a-workflow-set-2",
+    "href": "slides/04-evaluating-models.html#evaluate-a-workflow-set-2",
+    "title": "4 - Evaluating models",
+    "section": "Evaluate a workflow set",
+    "text": "Evaluate a workflow set\n\nworkflow_set(list(rings ~ .), list(tree_spec, rf_spec)) %>%\n  workflow_map(\"fit_resamples\", resamples = ring_folds) %>%\n  rank_results()\n#> # A tibble: 4 × 9\n#>   wflow_id              .config  .metric  mean std_err     n prepr…¹ model  rank\n#>   <chr>                 <chr>    <chr>   <dbl>   <dbl> <int> <chr>   <chr> <int>\n#> 1 formula_rand_forest   Preproc… rmse    2.17   0.0642     5 formula rand…     1\n#> 2 formula_rand_forest   Preproc… rsq     0.546  0.0158     5 formula rand…     1\n#> 3 formula_decision_tree Preproc… rmse    2.43   0.0582     5 formula deci…     2\n#> 4 formula_decision_tree Preproc… rsq     0.452  0.0158     5 formula deci…     2\n#> # … with abbreviated variable name ¹​preprocessor\n\n\n\nChange the metric using for ranking with the rank_metric to argument\nLots more available with workflow sets, like collect_metrics(), autoplot() methods, and more!"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#your-turn-4",
+    "href": "slides/04-evaluating-models.html#your-turn-4",
+    "title": "4 - Evaluating models",
+    "section": "Your turn",
+    "text": "Your turn\n\nWhen do you think a workflow set would be useful?\n\n\n\n03:00"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#the-final-fit",
+    "href": "slides/04-evaluating-models.html#the-final-fit",
+    "title": "4 - Evaluating models",
+    "section": "The final fit ",
+    "text": "The final fit \nSuppose that we choose to use our random forest model.\nLet’s fit the model on the training set and verify our performance using the test set.\n\nWe’ve shown you fit() and predict() (+ augment()) but there is a shortcut:\n\n# ring_split has train + test info\nfinal_fit <- last_fit(rf_wflow, ring_split) \n\nfinal_fit\n#> # Resampling results\n#> # Manual resampling \n#> # A tibble: 1 × 6\n#>   splits             id               .metrics .notes   .predictions .workflow \n#>   <list>             <chr>            <list>   <list>   <list>       <list>    \n#> 1 <split [3340/837]> train/test split <tibble> <tibble> <tibble>     <workflow>"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#what-is-in-final_fit",
+    "href": "slides/04-evaluating-models.html#what-is-in-final_fit",
+    "title": "4 - Evaluating models",
+    "section": "What is in final_fit? ",
+    "text": "What is in final_fit? \n\ncollect_metrics(final_fit)\n#> # A tibble: 2 × 4\n#>   .metric .estimator .estimate .config             \n#>   <chr>   <chr>          <dbl> <chr>               \n#> 1 rmse    standard       2.09  Preprocessor1_Model1\n#> 2 rsq     standard       0.584 Preprocessor1_Model1\n\n\nThese are metrics computed with the test set"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#what-is-in-final_fit-1",
+    "href": "slides/04-evaluating-models.html#what-is-in-final_fit-1",
+    "title": "4 - Evaluating models",
+    "section": "What is in final_fit? ",
+    "text": "What is in final_fit? \n\ncollect_predictions(final_fit)\n#> # A tibble: 837 × 5\n#>    id               .pred  .row rings .config             \n#>    <chr>            <dbl> <int> <dbl> <chr>               \n#>  1 train/test split 10.5      3     9 Preprocessor1_Model1\n#>  2 train/test split  8.46     6     8 Preprocessor1_Model1\n#>  3 train/test split  8.78     9     9 Preprocessor1_Model1\n#>  4 train/test split 10.9     13    11 Preprocessor1_Model1\n#>  5 train/test split  8.32    20     9 Preprocessor1_Model1\n#>  6 train/test split 10.5     25    10 Preprocessor1_Model1\n#>  7 train/test split 11.0     28    12 Preprocessor1_Model1\n#>  8 train/test split 11.3     29    15 Preprocessor1_Model1\n#>  9 train/test split 10.7     33    18 Preprocessor1_Model1\n#> 10 train/test split 10.5     39    11 Preprocessor1_Model1\n#> # … with 827 more rows\n#> # ℹ Use `print(n = ...)` to see more rows\n\n\nThese are predictions for the test set"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#section-7",
+    "href": "slides/04-evaluating-models.html#section-7",
+    "title": "4 - Evaluating models",
+    "section": "",
+    "text": "collect_predictions(final_fit) %>%\n  ggplot(aes(rings, .pred)) + \n  geom_abline(lty = 2, col = \"deeppink4\", size = 1.5) +\n  geom_point(alpha = 0.5) +\n  coord_obs_pred()"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#what-is-in-final_fit-2",
+    "href": "slides/04-evaluating-models.html#what-is-in-final_fit-2",
+    "title": "4 - Evaluating models",
+    "section": "What is in final_fit? ",
+    "text": "What is in final_fit? \n\nextract_workflow(final_fit)\n#> ══ Workflow [trained] ════════════════════════════════════════════════\n#> Preprocessor: Formula\n#> Model: rand_forest()\n#> \n#> ── Preprocessor ──────────────────────────────────────────────────────\n#> rings ~ .\n#> \n#> ── Model ─────────────────────────────────────────────────────────────\n#> Ranger result\n#> \n#> Call:\n#>  ranger::ranger(x = maybe_data_frame(x), y = y, num.trees = ~1000,      num.threads = 1, verbose = FALSE, seed = sample.int(10^5,          1)) \n#> \n#> Type:                             Regression \n#> Number of trees:                  1000 \n#> Sample size:                      3340 \n#> Number of independent variables:  8 \n#> Mtry:                             2 \n#> Target node size:                 5 \n#> Variable importance mode:         none \n#> Splitrule:                        variance \n#> OOB prediction error (MSE):       4.681506 \n#> R squared (OOB):                  0.5492882\n\n\nUse this for prediction on new data, like for deploying"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#going-farther",
+    "href": "slides/04-evaluating-models.html#going-farther",
+    "title": "4 - Evaluating models",
+    "section": "Going farther",
+    "text": "Going farther\n\ndecision_tree(mode = \"classification\")\n#> Decision Tree Model Specification (classification)\n#> \n#> Computational engine: rpart\n\nWorking with a classification model?\n\n\nClassification metrics are different, and may be more complicated\nDifferent classification metrics are appropriate depending on your use case"
+  },
+  {
+    "objectID": "slides/04-evaluating-models.html#your-turn-5",
+    "href": "slides/04-evaluating-models.html#your-turn-5",
+    "title": "4 - Evaluating models",
+    "section": "Your turn",
+    "text": "Your turn\n\nBefore lunch discussion!\nWhich model do you think you would decide to use?\nWhat surprised you the most?\nWhat is one thing you are looking forward to next?\n\n\n\n05:00\n\n\n\n\n\nhttps://bit.ly/learn-tidymodels"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#build-better-predictors",
+    "href": "slides/05-feature-engineering.html#build-better-predictors",
+    "title": "5 - Feature engineering",
+    "section": "Build better predictors 🛠️",
+    "text": "Build better predictors 🛠️\n\n\nSome models require predictors with certain characteristics or a certain format\nSome datasets are better modeled when one or more predictors are transformed"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#section-1",
+    "href": "slides/05-feature-engineering.html#section-1",
+    "title": "5 - Feature engineering",
+    "section": "",
+    "text": "Artwork by @allison_horst"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#build-better-predictors-1",
+    "href": "slides/05-feature-engineering.html#build-better-predictors-1",
+    "title": "5 - Feature engineering",
+    "section": "Build better predictors 🛠️ ",
+    "text": "Build better predictors 🛠️ \n\n\nStatistical parameters for recipe steps can be estimated from an initial data set and then applied to other data sets\nThe resulting features can be used as inputs for statistical or machine learning models"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#abalone-data-spending",
+    "href": "slides/05-feature-engineering.html#abalone-data-spending",
+    "title": "5 - Feature engineering",
+    "section": "Abalone data spending ",
+    "text": "Abalone data spending \n\nlibrary(tidymodels)\nlibrary(tidyverse)\nabalone <- read_csv(\"abalone.csv\") %>% mutate_if(is.character, as.factor)\n\nset.seed(123)\nring_split <- initial_split(abalone, prop = 0.8, strata = rings)\nring_train <- training(ring_split)\nring_test <- testing(ring_split)\n\nset.seed(234)\nring_folds <- vfold_cv(ring_train, v = 5, strata = rings)\nring_folds\n#> #  5-fold cross-validation using stratification \n#> # A tibble: 5 × 2\n#>   splits             id   \n#>   <list>             <chr>\n#> 1 <split [2670/670]> Fold1\n#> 2 <split [2672/668]> Fold2\n#> 3 <split [2672/668]> Fold3\n#> 4 <split [2673/667]> Fold4\n#> 5 <split [2673/667]> Fold5"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#a-first-recipe",
+    "href": "slides/05-feature-engineering.html#a-first-recipe",
+    "title": "5 - Feature engineering",
+    "section": "A first recipe ",
+    "text": "A first recipe \n\nring_rec <- \n  recipe(rings ~ ., data = ring_train)\n\n\nThe recipe() function assigns columns to roles of “outcome” or “predictor” using the formula"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#a-first-recipe-1",
+    "href": "slides/05-feature-engineering.html#a-first-recipe-1",
+    "title": "5 - Feature engineering",
+    "section": "A first recipe ",
+    "text": "A first recipe \n\nsummary(ring_rec)\n#> # A tibble: 9 × 4\n#>   variable       type    role      source  \n#>   <chr>          <chr>   <chr>     <chr>   \n#> 1 sex            nominal predictor original\n#> 2 length         numeric predictor original\n#> 3 diameter       numeric predictor original\n#> 4 height         numeric predictor original\n#> 5 whole_weight   numeric predictor original\n#> 6 shucked_weight numeric predictor original\n#> 7 viscera_weight numeric predictor original\n#> 8 shell_weight   numeric predictor original\n#> 9 rings          numeric outcome   original"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#a-first-recipe-2",
+    "href": "slides/05-feature-engineering.html#a-first-recipe-2",
+    "title": "5 - Feature engineering",
+    "section": "A first recipe ",
+    "text": "A first recipe \n\nring_rec <- \n  recipe(rings ~ ., data = ring_train)"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#create-indicator-variables",
+    "href": "slides/05-feature-engineering.html#create-indicator-variables",
+    "title": "5 - Feature engineering",
+    "section": "Create indicator variables ",
+    "text": "Create indicator variables \n\nring_rec <- \n  recipe(rings ~ ., data = ring_train) %>% \n  step_dummy(all_nominal_predictors())\n\n\n\n\n\n\n \n  \n    rings \n    length \n    diameter \n    height \n    whole_weight \n    shucked_weight \n    viscera_weight \n    shell_weight \n    sex_infant \n    sex_male \n  \n \n\n  \n    7 \n    0.350 \n    0.265 \n    0.090 \n    0.226 \n    0.100 \n    0.048 \n    0.070 \n    0 \n    1 \n  \n  \n    7 \n    0.330 \n    0.255 \n    0.080 \n    0.205 \n    0.090 \n    0.040 \n    0.055 \n    1 \n    0 \n  \n  \n    7 \n    0.355 \n    0.280 \n    0.085 \n    0.290 \n    0.095 \n    0.040 \n    0.115 \n    1 \n    0 \n  \n  \n    7 \n    0.365 \n    0.295 \n    0.080 \n    0.256 \n    0.097 \n    0.043 \n    0.100 \n    0 \n    1 \n  \n  \n    8 \n    0.465 \n    0.355 \n    0.105 \n    0.480 \n    0.227 \n    0.124 \n    0.125 \n    0 \n    1 \n  \n  \n    8 \n    0.450 \n    0.355 \n    0.105 \n    0.522 \n    0.237 \n    0.116 \n    0.145 \n    0 \n    0 \n  \n  \n    5 \n    0.240 \n    0.175 \n    0.045 \n    0.070 \n    0.032 \n    0.024 \n    0.020 \n    1 \n    0 \n  \n  \n    5 \n    0.205 \n    0.150 \n    0.055 \n    0.042 \n    0.025 \n    0.015 \n    0.012 \n    1 \n    0 \n  \n  \n    4 \n    0.210 \n    0.150 \n    0.050 \n    0.042 \n    0.018 \n    0.013 \n    0.015 \n    1 \n    0 \n  \n  \n    7 \n    0.390 \n    0.295 \n    0.095 \n    0.203 \n    0.088 \n    0.045 \n    0.075 \n    1 \n    0"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#normalization",
+    "href": "slides/05-feature-engineering.html#normalization",
+    "title": "5 - Feature engineering",
+    "section": "Normalization ",
+    "text": "Normalization \n\nring_rec <- \n  recipe(rings ~ ., data = ring_train) %>% \n  step_dummy(all_nominal_predictors()) %>% \n  step_normalize(all_numeric_predictors())\n\n\n\n\n\n\n \n  \n    rings \n    length \n    diameter \n    height \n    whole_weight \n    shucked_weight \n    viscera_weight \n    shell_weight \n    sex_infant \n    sex_male \n  \n \n\n  \n    7 \n    -1.453 \n    -1.444 \n    -1.284 \n    -1.228 \n    -1.166 \n    -1.203 \n    -1.215 \n    -0.683 \n    1.307 \n  \n  \n    7 \n    -1.620 \n    -1.545 \n    -1.545 \n    -1.270 \n    -1.211 \n    -1.286 \n    -1.323 \n    1.463 \n    -0.765 \n  \n  \n    7 \n    -1.411 \n    -1.292 \n    -1.414 \n    -1.095 \n    -1.187 \n    -1.286 \n    -0.888 \n    1.463 \n    -0.765 \n  \n  \n    7 \n    -1.327 \n    -1.140 \n    -1.545 \n    -1.166 \n    -1.178 \n    -1.254 \n    -0.997 \n    -0.683 \n    1.307 \n  \n  \n    8 \n    -0.489 \n    -0.532 \n    -0.891 \n    -0.708 \n    -0.592 \n    -0.511 \n    -0.816 \n    -0.683 \n    1.307 \n  \n  \n    8 \n    -0.615 \n    -0.532 \n    -0.891 \n    -0.619 \n    -0.547 \n    -0.580 \n    -0.671 \n    -0.683 \n    -0.765 \n  \n  \n    5 \n    -2.374 \n    -2.356 \n    -2.461 \n    -1.546 \n    -1.473 \n    -1.433 \n    -1.577 \n    1.463 \n    -0.765 \n  \n  \n    5 \n    -2.668 \n    -2.610 \n    -2.200 \n    -1.604 \n    -1.500 \n    -1.511 \n    -1.635 \n    1.463 \n    -0.765 \n  \n  \n    4 \n    -2.626 \n    -2.610 \n    -2.330 \n    -1.604 \n    -1.536 \n    -1.533 \n    -1.613 \n    1.463 \n    -0.765 \n  \n  \n    7 \n    -1.118 \n    -1.140 \n    -1.153 \n    -1.274 \n    -1.220 \n    -1.235 \n    -1.178 \n    1.463 \n    -0.765"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#reduce-correlation",
+    "href": "slides/05-feature-engineering.html#reduce-correlation",
+    "title": "5 - Feature engineering",
+    "section": "Reduce correlation ",
+    "text": "Reduce correlation \n\nring_rec <- \n  recipe(rings ~ ., data = ring_train) %>% \n  step_dummy(all_nominal_predictors()) %>% \n  step_normalize(all_numeric_predictors()) %>% \n  step_corr(all_numeric_predictors(), threshold = 0.9)\n\n\n\n\n\n\n \n  \n    rings \n    height \n    shucked_weight \n    shell_weight \n    sex_infant \n    sex_male \n  \n \n\n  \n    7 \n    -1.284 \n    -1.166 \n    -1.215 \n    -0.683 \n    1.307 \n  \n  \n    7 \n    -1.545 \n    -1.211 \n    -1.323 \n    1.463 \n    -0.765 \n  \n  \n    7 \n    -1.414 \n    -1.187 \n    -0.888 \n    1.463 \n    -0.765 \n  \n  \n    7 \n    -1.545 \n    -1.178 \n    -0.997 \n    -0.683 \n    1.307 \n  \n  \n    8 \n    -0.891 \n    -0.592 \n    -0.816 \n    -0.683 \n    1.307 \n  \n  \n    8 \n    -0.891 \n    -0.547 \n    -0.671 \n    -0.683 \n    -0.765 \n  \n  \n    5 \n    -2.461 \n    -1.473 \n    -1.577 \n    1.463 \n    -0.765 \n  \n  \n    5 \n    -2.200 \n    -1.500 \n    -1.635 \n    1.463 \n    -0.765 \n  \n  \n    4 \n    -2.330 \n    -1.536 \n    -1.613 \n    1.463 \n    -0.765 \n  \n  \n    7 \n    -1.153 \n    -1.220 \n    -1.178 \n    1.463 \n    -0.765"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#dimensionality-reduction",
+    "href": "slides/05-feature-engineering.html#dimensionality-reduction",
+    "title": "5 - Feature engineering",
+    "section": "Dimensionality reduction ",
+    "text": "Dimensionality reduction \n\nring_rec <- \n  recipe(rings ~ ., data = ring_train) %>% \n  step_dummy(all_nominal_predictors()) %>% \n  step_normalize(all_numeric_predictors()) %>% \n  step_pca(all_numeric_predictors())\n\n\n\n\n\n\n \n  \n    rings \n    PC1 \n    PC2 \n    PC3 \n    PC4 \n    PC5 \n  \n \n\n  \n    7 \n    -2.930 \n    2.248 \n    -0.254 \n    0.297 \n    -0.143 \n  \n  \n    7 \n    -4.017 \n    -0.495 \n    0.308 \n    0.346 \n    -0.117 \n  \n  \n    7 \n    -3.570 \n    -0.608 \n    0.352 \n    0.191 \n    -0.191 \n  \n  \n    7 \n    -2.786 \n    2.207 \n    -0.228 \n    0.306 \n    0.073 \n  \n  \n    8 \n    -1.309 \n    1.838 \n    -0.038 \n    0.151 \n    0.362 \n  \n  \n    8 \n    -1.541 \n    0.133 \n    -1.173 \n    0.356 \n    0.253 \n  \n  \n    5 \n    -5.254 \n    -0.193 \n    0.229 \n    1.113 \n    -0.299 \n  \n  \n    5 \n    -5.442 \n    -0.142 \n    0.193 \n    1.078 \n    -0.653 \n  \n  \n    4 \n    -5.486 \n    -0.133 \n    0.193 \n    1.116 \n    -0.584 \n  \n  \n    7 \n    -3.480 \n    -0.625 \n    0.318 \n    -0.156 \n    0.053"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#build-nonlinear-features",
+    "href": "slides/05-feature-engineering.html#build-nonlinear-features",
+    "title": "5 - Feature engineering",
+    "section": "Build nonlinear features ",
+    "text": "Build nonlinear features \n\nring_rec <- \n  recipe(rings ~ ., data = ring_train) %>% \n  step_dummy(all_nominal_predictors()) %>% \n  step_normalize(all_numeric_predictors()) %>% \n  step_ns(shucked_weight, deg_free = 4)\n\n\n\n\n\n\n \n  \n    rings \n    length \n    diameter \n    height \n    whole_weight \n    viscera_weight \n    shell_weight \n    sex_infant \n    sex_male \n    shucked_weight_ns_1 \n    shucked_weight_ns_2 \n    shucked_weight_ns_3 \n    shucked_weight_ns_4 \n  \n \n\n  \n    7 \n    -1.453 \n    -1.444 \n    -1.284 \n    -1.228 \n    -1.203 \n    -1.215 \n    -0.683 \n    1.307 \n    0.031 \n    -0.181 \n    0.392 \n    -0.211 \n  \n  \n    7 \n    -1.620 \n    -1.545 \n    -1.545 \n    -1.270 \n    -1.286 \n    -1.323 \n    1.463 \n    -0.765 \n    0.023 \n    -0.166 \n    0.360 \n    -0.194 \n  \n  \n    7 \n    -1.411 \n    -1.292 \n    -1.414 \n    -1.095 \n    -1.286 \n    -0.888 \n    1.463 \n    -0.765 \n    0.027 \n    -0.174 \n    0.378 \n    -0.204 \n  \n  \n    7 \n    -1.327 \n    -1.140 \n    -1.545 \n    -1.166 \n    -1.254 \n    -0.997 \n    -0.683 \n    1.307 \n    0.029 \n    -0.177 \n    0.384 \n    -0.207 \n  \n  \n    8 \n    -0.489 \n    -0.532 \n    -0.891 \n    -0.708 \n    -0.511 \n    -0.816 \n    -0.683 \n    1.307 \n    0.366 \n    -0.206 \n    0.450 \n    -0.242 \n  \n  \n    8 \n    -0.615 \n    -0.532 \n    -0.891 \n    -0.619 \n    -0.580 \n    -0.671 \n    -0.683 \n    -0.765 \n    0.410 \n    -0.194 \n    0.425 \n    -0.229 \n  \n  \n    5 \n    -2.374 \n    -2.356 \n    -2.461 \n    -1.546 \n    -1.433 \n    -1.577 \n    1.463 \n    -0.765 \n    0.001 \n    -0.062 \n    0.134 \n    -0.072 \n  \n  \n    5 \n    -2.668 \n    -2.610 \n    -2.200 \n    -1.604 \n    -1.511 \n    -1.635 \n    1.463 \n    -0.765 \n    0.000 \n    -0.050 \n    0.108 \n    -0.058 \n  \n  \n    4 \n    -2.626 \n    -2.610 \n    -2.330 \n    -1.604 \n    -1.533 \n    -1.613 \n    1.463 \n    -0.765 \n    0.000 \n    -0.034 \n    0.073 \n    -0.040 \n  \n  \n    7 \n    -1.118 \n    -1.140 \n    -1.153 \n    -1.274 \n    -1.235 \n    -1.178 \n    1.463 \n    -0.765 \n    0.021 \n    -0.163 \n    0.354 \n    -0.191"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#your-turn",
+    "href": "slides/05-feature-engineering.html#your-turn",
+    "title": "5 - Feature engineering",
+    "section": "Your turn",
+    "text": "Your turn\n\nCreate a recipe() for the abalone data to :\n\ncreate one-hot indicator variables\nremove zero-variance variables\n\n\n\n\n03:00"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#minimal-recipe",
+    "href": "slides/05-feature-engineering.html#minimal-recipe",
+    "title": "5 - Feature engineering",
+    "section": "Minimal recipe ",
+    "text": "Minimal recipe \n\nring_rec <-\n  recipe(rings ~ ., data = ring_train) %>%\n  step_dummy(all_nominal_predictors()) %>%\n  step_normalize(all_numeric_predictors())"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#using-a-workflow",
+    "href": "slides/05-feature-engineering.html#using-a-workflow",
+    "title": "5 - Feature engineering",
+    "section": "Using a workflow    ",
+    "text": "Using a workflow    \n\nset.seed(3)\n\nlm_wf <- workflow(ring_rec, linear_reg()) \nctrl_abalone <- control_resamples(save_pred = TRUE)\nlm_res <- fit_resamples(lm_wf, ring_folds, control = ctrl_abalone)\n\ncollect_metrics(lm_res)\n#> # A tibble: 2 × 6\n#>   .metric .estimator  mean     n std_err .config             \n#>   <chr>   <chr>      <dbl> <int>   <dbl> <chr>               \n#> 1 rmse    standard   2.20      5 0.0413  Preprocessor1_Model1\n#> 2 rsq     standard   0.533     5 0.00833 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#your-turn-1",
+    "href": "slides/05-feature-engineering.html#your-turn-1",
+    "title": "5 - Feature engineering",
+    "section": "Your turn",
+    "text": "Your turn\n\nUse fit_resamples() to fit your workflow with a recipe.\nCollect the predictions from the results.\n\n\n\n05:00"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#holdout-predictions",
+    "href": "slides/05-feature-engineering.html#holdout-predictions",
+    "title": "5 - Feature engineering",
+    "section": "Holdout predictions    ",
+    "text": "Holdout predictions    \n\n# since we used `save_pred = TRUE`\nring_lm_preds <- collect_predictions(lm_res)\nring_lm_preds %>% group_by(id) %>% slice(1:3)\n#> # A tibble: 15 × 5\n#> # Groups:   id [5]\n#>    id    .pred  .row rings .config             \n#>    <chr> <dbl> <int> <dbl> <chr>               \n#>  1 Fold1  7.86     1     7 Preprocessor1_Model1\n#>  2 Fold1  8.17     3     7 Preprocessor1_Model1\n#>  3 Fold1  7.42    10     7 Preprocessor1_Model1\n#>  4 Fold2  9.97    11     7 Preprocessor1_Model1\n#>  5 Fold2  8.27    13     7 Preprocessor1_Model1\n#>  6 Fold2 10.7     14     8 Preprocessor1_Model1\n#>  7 Fold3  8.67     6     8 Preprocessor1_Model1\n#>  8 Fold3  5.06     7     5 Preprocessor1_Model1\n#>  9 Fold3  6.33    12     6 Preprocessor1_Model1\n#> 10 Fold4  8.57     4     7 Preprocessor1_Model1\n#> 11 Fold4  8.23     5     8 Preprocessor1_Model1\n#> 12 Fold4  5.16     8     5 Preprocessor1_Model1\n#> 13 Fold5  6.65     2     7 Preprocessor1_Model1\n#> 14 Fold5  5.69    17     4 Preprocessor1_Model1\n#> 15 Fold5  5.94    33     7 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#recipes-are-estimated",
+    "href": "slides/05-feature-engineering.html#recipes-are-estimated",
+    "title": "5 - Feature engineering",
+    "section": "Recipes are estimated ",
+    "text": "Recipes are estimated \nPreprocessing steps in a recipe use the training set to compute quantities\n\nWhat kind of quantities are computed for preprocessing?\n\nLevels of a factor\nWhether a column has zero variance\nMean and standard deviation for normalization\nHow to map variables to principal components\n\n\n\nWhen using a workflow, this estimation occurs with fit()"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#fit-different-recipes",
+    "href": "slides/05-feature-engineering.html#fit-different-recipes",
+    "title": "5 - Feature engineering",
+    "section": "Fit different recipes    ",
+    "text": "Fit different recipes    \nA workflow set can cross models and/or preprocessors:\n\nset.seed(1)\n\nabalone_set_res <-\n  workflow_set(\n    list(\n      indicators = ring_rec, \n      decorr = ring_rec %>% step_corr(all_numeric_predictors(), threshold = 0.9), \n      splines = ring_rec %>% step_ns(shucked_weight, deg_free = 4), \n      pca = ring_rec %>% step_pca(all_numeric_predictors())\n    ),\n    list(lm = linear_reg())\n  ) %>%\n  workflow_map(\n    fn = \"fit_resamples\", \n    resamples = ring_folds, \n    verbose = TRUE, \n    control = ctrl_abalone\n  )"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#your-turn-2",
+    "href": "slides/05-feature-engineering.html#your-turn-2",
+    "title": "5 - Feature engineering",
+    "section": "Your turn",
+    "text": "Your turn\n\nCreate a workflow set with 2 or 3 recipes.\n(Consider using recipes we’ve already created.)\nUse workflow_map() to resample the workflow set.\n\n\n\n08:00"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#compare-recipes",
+    "href": "slides/05-feature-engineering.html#compare-recipes",
+    "title": "5 - Feature engineering",
+    "section": "Compare recipes",
+    "text": "Compare recipes\n\nlibrary(forcats)\ncollect_metrics(abalone_set_res) %>%\n  filter(.metric == \"rmse\") %>%\n  ggplot(aes(x = mean, y = fct_reorder(wflow_id, mean))) +\n  geom_crossbar(aes(xmin = mean - std_err, xmax = mean + std_err)) +\n  labs(y = NULL, x = \"RMSE (holdout sets)\")"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#compare-recipes-output",
+    "href": "slides/05-feature-engineering.html#compare-recipes-output",
+    "title": "5 - Feature engineering",
+    "section": "Compare recipes",
+    "text": "Compare recipes"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#more-on-using-recipes",
+    "href": "slides/05-feature-engineering.html#more-on-using-recipes",
+    "title": "5 - Feature engineering",
+    "section": "More on using recipes ",
+    "text": "More on using recipes \n\n\nFind recipe steps at https://www.tidymodels.org/find/recipes/\nYou can skip some steps on new data\nThe order of recipe steps matters\nWhat happens when a recipe goes wrong? 😱"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#what-happens-when-a-recipe-goes-wrong",
+    "href": "slides/05-feature-engineering.html#what-happens-when-a-recipe-goes-wrong",
+    "title": "5 - Feature engineering",
+    "section": "What happens when a recipe goes wrong? 😱",
+    "text": "What happens when a recipe goes wrong? 😱\n\n\nWe recommend that you use a workflow() to estimate and apply a recipe\nThere are two lower-level functions for handling a recipe on its own, like for debugging\n\n\n\n\nfit() ➡️ prep()\npredict() ➡️ bake()"
+  },
+  {
+    "objectID": "slides/05-feature-engineering.html#your-turn-3",
+    "href": "slides/05-feature-engineering.html#your-turn-3",
+    "title": "5 - Feature engineering",
+    "section": "Your turn",
+    "text": "Your turn\n\nFirst use prep() on one of your recipes.\nThen use bake()!\n\n\n\n05:00\n\n\n\n\n\nhttps://bit.ly/learn-tidymodels"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#choose-the-best-parameter",
+    "href": "slides/06-tuning-hyperparameters.html#choose-the-best-parameter",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Choose the best parameter ",
+    "text": "Choose the best parameter \n\nring_rec <-\n  recipe(rings ~ ., data = ring_train) %>%\n  step_dummy(all_nominal_predictors()) %>%\n  step_ns(shucked_weight, deg_free = 4)\n\n\nHow do we know that 4️⃣ is a good value?"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#choose-the-best-parameter-1",
+    "href": "slides/06-tuning-hyperparameters.html#choose-the-best-parameter-1",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Choose the best parameter  ",
+    "text": "Choose the best parameter  \n\nring_rec <-\n  recipe(rings ~ ., data = ring_train) %>%\n  step_dummy(all_nominal_predictors()) %>%\n  step_ns(shucked_weight, deg_free = tune())"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#section",
+    "href": "slides/06-tuning-hyperparameters.html#section",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "",
+    "text": "Splines replace the existing numeric predictor with a set of columns that allow a model to emulate a flexible, nonlinear relationship.\nMore spline terms = more “wiggly”, i.e. flexibly model a nonlinear relationship\nHow many spline terms? This is called degrees of freedom\n2 and 5 look like they underfit; 20 and 100 look like they overfit"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#splines-and-nonlinear-relationships",
+    "href": "slides/06-tuning-hyperparameters.html#splines-and-nonlinear-relationships",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Splines and nonlinear relationships",
+    "text": "Splines and nonlinear relationships\n\n\n\n\n\n\n\n\n\n\nOur abalone data exhibits nonlinear relationships\nWe can model nonlinearity like this via a model (later today) or feature engineering\nHow do we decide how “wiggly” or flexible to make our spline features? TUNING"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#choose-the-best-parameter-2",
+    "href": "slides/06-tuning-hyperparameters.html#choose-the-best-parameter-2",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Choose the best parameter    ",
+    "text": "Choose the best parameter    \n\nring_rec <-\n  recipe(rings ~ ., data = ring_train) %>%\n  step_dummy(all_nominal_predictors()) %>%\n  step_ns(shucked_weight, deg_free = tune())\n\nspline_wf <- workflow(ring_rec, linear_reg())\nspline_wf\n#> ══ Workflow ══════════════════════════════════════════════════════════\n#> Preprocessor: Recipe\n#> Model: linear_reg()\n#> \n#> ── Preprocessor ──────────────────────────────────────────────────────\n#> 2 Recipe Steps\n#> \n#> • step_dummy()\n#> • step_ns()\n#> \n#> ── Model ─────────────────────────────────────────────────────────────\n#> Linear Regression Model Specification (regression)\n#> \n#> Computational engine: lm"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#choose-the-best-parameter-3",
+    "href": "slides/06-tuning-hyperparameters.html#choose-the-best-parameter-3",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Choose the best parameter    ",
+    "text": "Choose the best parameter    \n\nset.seed(123)\nspline_res <- tune_grid(spline_wf, ring_folds)\nspline_res\n#> # Tuning results\n#> # 5-fold cross-validation using stratification \n#> # A tibble: 5 × 4\n#>   splits             id    .metrics          .notes          \n#>   <list>             <chr> <list>            <list>          \n#> 1 <split [2670/670]> Fold1 <tibble [18 × 5]> <tibble [0 × 3]>\n#> 2 <split [2672/668]> Fold2 <tibble [18 × 5]> <tibble [0 × 3]>\n#> 3 <split [2672/668]> Fold3 <tibble [18 × 5]> <tibble [0 × 3]>\n#> 4 <split [2673/667]> Fold4 <tibble [18 × 5]> <tibble [0 × 3]>\n#> 5 <split [2673/667]> Fold5 <tibble [18 × 5]> <tibble [0 × 3]>"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#your-turn",
+    "href": "slides/06-tuning-hyperparameters.html#your-turn",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Your turn",
+    "text": "Your turn\n\nUse tune_grid() to tune your workflow with a recipe.\nCollect the metrics from the results.\nUse autoplot() to visualize the results.\nTry show_best() to understand which parameter values are best.\n\n\n\n05:00"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#tuning-results",
+    "href": "slides/06-tuning-hyperparameters.html#tuning-results",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Tuning results    ",
+    "text": "Tuning results    \n\ncollect_metrics(spline_res)\n#> # A tibble: 18 × 7\n#>    deg_free .metric .estimator  mean     n std_err .config             \n#>       <int> <chr>   <chr>      <dbl> <int>   <dbl> <chr>               \n#>  1       13 rmse    standard   2.19      5 0.0397  Preprocessor1_Model1\n#>  2       13 rsq     standard   0.540     5 0.00888 Preprocessor1_Model1\n#>  3        8 rmse    standard   2.18      5 0.0395  Preprocessor2_Model1\n#>  4        8 rsq     standard   0.541     5 0.00836 Preprocessor2_Model1\n#>  5       11 rmse    standard   2.18      5 0.0402  Preprocessor3_Model1\n#>  6       11 rsq     standard   0.541     5 0.00895 Preprocessor3_Model1\n#>  7        4 rmse    standard   2.18      5 0.0403  Preprocessor4_Model1\n#>  8        4 rsq     standard   0.542     5 0.00790 Preprocessor4_Model1\n#>  9        7 rmse    standard   2.18      5 0.0398  Preprocessor5_Model1\n#> 10        7 rsq     standard   0.542     5 0.00836 Preprocessor5_Model1\n#> 11       14 rmse    standard   2.19      5 0.0409  Preprocessor6_Model1\n#> 12       14 rsq     standard   0.540     5 0.00921 Preprocessor6_Model1\n#> 13        2 rmse    standard   2.20      5 0.0428  Preprocessor7_Model1\n#> 14        2 rsq     standard   0.535     5 0.00820 Preprocessor7_Model1\n#> 15        6 rmse    standard   2.18      5 0.0406  Preprocessor8_Model1\n#> 16        6 rsq     standard   0.542     5 0.00805 Preprocessor8_Model1\n#> 17        3 rmse    standard   2.18      5 0.0411  Preprocessor9_Model1\n#> 18        3 rsq     standard   0.542     5 0.00843 Preprocessor9_Model1"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#tuning-results-1",
+    "href": "slides/06-tuning-hyperparameters.html#tuning-results-1",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Tuning results    ",
+    "text": "Tuning results    \n\ncollect_metrics(spline_res, summarize = FALSE)\n#> # A tibble: 90 × 6\n#>    id    deg_free .metric .estimator .estimate .config             \n#>    <chr>    <int> <chr>   <chr>          <dbl> <chr>               \n#>  1 Fold1       13 rmse    standard       2.11  Preprocessor1_Model1\n#>  2 Fold1       13 rsq     standard       0.513 Preprocessor1_Model1\n#>  3 Fold2       13 rmse    standard       2.24  Preprocessor1_Model1\n#>  4 Fold2       13 rsq     standard       0.537 Preprocessor1_Model1\n#>  5 Fold3       13 rmse    standard       2.31  Preprocessor1_Model1\n#>  6 Fold3       13 rsq     standard       0.544 Preprocessor1_Model1\n#>  7 Fold4       13 rmse    standard       2.11  Preprocessor1_Model1\n#>  8 Fold4       13 rsq     standard       0.569 Preprocessor1_Model1\n#>  9 Fold5       13 rmse    standard       2.15  Preprocessor1_Model1\n#> 10 Fold5       13 rsq     standard       0.540 Preprocessor1_Model1\n#> # … with 80 more rows\n#> # ℹ Use `print(n = ...)` to see more rows"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#tuning-results-2",
+    "href": "slides/06-tuning-hyperparameters.html#tuning-results-2",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Tuning results    ",
+    "text": "Tuning results    \n\nautoplot(spline_res, metric = \"rmse\")"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#tuning-results-3",
+    "href": "slides/06-tuning-hyperparameters.html#tuning-results-3",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Tuning results    ",
+    "text": "Tuning results    \n\nshow_best(spline_res)\n#> # A tibble: 5 × 7\n#>   deg_free .metric .estimator  mean     n std_err .config             \n#>      <int> <chr>   <chr>      <dbl> <int>   <dbl> <chr>               \n#> 1        3 rmse    standard    2.18     5  0.0411 Preprocessor9_Model1\n#> 2        6 rmse    standard    2.18     5  0.0406 Preprocessor8_Model1\n#> 3        4 rmse    standard    2.18     5  0.0403 Preprocessor4_Model1\n#> 4        7 rmse    standard    2.18     5  0.0398 Preprocessor5_Model1\n#> 5       11 rmse    standard    2.18     5  0.0402 Preprocessor3_Model1"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#optimize-tuning-parameters",
+    "href": "slides/06-tuning-hyperparameters.html#optimize-tuning-parameters",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Optimize tuning parameters",
+    "text": "Optimize tuning parameters\n\n\nTry different values and measure their performance\nFind good values for these parameters\nFinalize the model by fitting the model with these parameters to the entire training set"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#customize-grid-search",
+    "href": "slides/06-tuning-hyperparameters.html#customize-grid-search",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Customize grid search ",
+    "text": "Customize grid search \n\nYou can control the grid used to search the parameter space\nUse the grid_*() functions, or create your own tibble\n\n\n\ntibble(deg_free = 1:10)\n#> # A tibble: 10 × 1\n#>    deg_free\n#>       <int>\n#>  1        1\n#>  2        2\n#>  3        3\n#>  4        4\n#>  5        5\n#>  6        6\n#>  7        7\n#>  8        8\n#>  9        9\n#> 10       10"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#customize-grid-search-1",
+    "href": "slides/06-tuning-hyperparameters.html#customize-grid-search-1",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Customize grid search ",
+    "text": "Customize grid search \n\nYou can control the grid used to search the parameter space\nUse the grid_*() functions, or create your own tibble\n\n\ngrid_regular(list(deg_free = spline_degree()), levels = 5)\n#> # A tibble: 5 × 1\n#>   deg_free\n#>      <int>\n#> 1        1\n#> 2        3\n#> 3        5\n#> 4        7\n#> 5       10"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#customize-grid-search-2",
+    "href": "slides/06-tuning-hyperparameters.html#customize-grid-search-2",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Customize grid search ",
+    "text": "Customize grid search \n\nYou can control the grid used to search the parameter space\nUse the grid_*() functions, or create your own tibble\n\n\ngrid_regular(list(deg_free = spline_degree(), tree_depth()), levels = 5)\n#> # A tibble: 25 × 2\n#>    deg_free tree_depth\n#>       <int>      <int>\n#>  1        1          1\n#>  2        3          1\n#>  3        5          1\n#>  4        7          1\n#>  5       10          1\n#>  6        1          4\n#>  7        3          4\n#>  8        5          4\n#>  9        7          4\n#> 10       10          4\n#> # … with 15 more rows\n#> # ℹ Use `print(n = ...)` to see more rows"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#customize-grid-search-3",
+    "href": "slides/06-tuning-hyperparameters.html#customize-grid-search-3",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Customize grid search ",
+    "text": "Customize grid search \n\nYou can control the grid used to search the parameter space\nUse the grid_*() functions, or create your own tibble\n\n\ngrid_latin_hypercube(list(deg_free = spline_degree(), tree_depth()), size = 5)\n#> # A tibble: 5 × 2\n#>   deg_free tree_depth\n#>      <int>      <int>\n#> 1        4          8\n#> 2        6         13\n#> 3        2          2\n#> 4        7         12\n#> 5        9          5\n\n\n\nA space-filling design like this tends to perform better than random grids.\nSpace-filling designs are also usually more efficient than regular grids."
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#boosted-trees-1",
+    "href": "slides/06-tuning-hyperparameters.html#boosted-trees-1",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Boosted trees 🌳🌲🌴🌵🌳🌳🌴🌲🌵🌴🌳🌵",
+    "text": "Boosted trees 🌳🌲🌴🌵🌳🌳🌴🌲🌵🌴🌳🌵\n\nEnsemble many decision tree models\n\n\n\nReview how a decision tree model works:\n\nSeries of splits or if/then statements based on predictors\nFirst the tree grows until some condition is met (maximum depth, no more data)\nThen the tree is pruned to reduce its complexity"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#single-decision-tree",
+    "href": "slides/06-tuning-hyperparameters.html#single-decision-tree",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Single decision tree",
+    "text": "Single decision tree"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#boosted-trees-2",
+    "href": "slides/06-tuning-hyperparameters.html#boosted-trees-2",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Boosted trees 🌳🌲🌴🌵🌳🌳🌴🌲🌵🌴🌳🌵",
+    "text": "Boosted trees 🌳🌲🌴🌵🌳🌳🌴🌲🌵🌴🌳🌵\nBoosting methods fit a sequence of tree-based models:\n\n\nEach tree is dependent on the one before and tries to compensate for any poor results in the previous trees\nThis is like gradient ascent/descent methods"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#boosted-tree-tuning-parameters",
+    "href": "slides/06-tuning-hyperparameters.html#boosted-tree-tuning-parameters",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Boosted tree tuning parameters",
+    "text": "Boosted tree tuning parameters\nMost modern boosting methods have a lot of tuning parameters!\n\n\nFor tree growth and pruning (min_n, max_depth, etc)\nFor boosting (trees, stop_iter, learn_rate)\n\n\n\nWe’ll use early stopping to stop boosting when a few iterations produce consecutively worse results."
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#comparing-tree-ensembles",
+    "href": "slides/06-tuning-hyperparameters.html#comparing-tree-ensembles",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Comparing tree ensembles",
+    "text": "Comparing tree ensembles\n\n\nRandom forest\n\nIndependent trees\nBootstrapped data\nNo pruning\n1000’s of trees\n\n\nBoosting\n\nDependent trees\nTune tree parameters\nFar fewer trees\n\n\n\n\nTypical performance: boosting > random forest > bagging > single trees"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#build-an-xgboost-workflow",
+    "href": "slides/06-tuning-hyperparameters.html#build-an-xgboost-workflow",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Build an xgboost workflow    ",
+    "text": "Build an xgboost workflow    \n\nxgb_spec <-\n  boost_tree(\n    trees = 500, min_n = tune(), stop_iter = tune(), tree_depth = tune(),\n    learn_rate = tune(), loss_reduction = tune()\n  ) %>%\n  set_mode(\"regression\") %>% \n  set_engine(\"xgboost\", validation = 0.1)\n\nxgb_rec <- \n  recipe(rings ~ ., data = ring_train) %>%\n  step_dummy(all_nominal_predictors())\n\nxgb_wf <- workflow(xgb_rec, xgb_spec) \n\n\nvalidation is an argument to parsnip::xgb_train(), not directly to xgboost. It generates a validation set that is used by xgboost when evaluating model performance. It is eventually assigned to xgb.train(watchlist = list(validation = data)).\nSee translate(xgb_spec) to see where it is passed to parsnip::xgb_train()."
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#your-turn-1",
+    "href": "slides/06-tuning-hyperparameters.html#your-turn-1",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Your turn",
+    "text": "Your turn\n\nCreate your boosted tree workflow.\n\n\n\n03:00"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#tuning",
+    "href": "slides/06-tuning-hyperparameters.html#tuning",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Tuning ",
+    "text": "Tuning \nThis will take some time to run ⏳\n\nset.seed(9)\nctrl_abalone <- control_grid(save_pred = TRUE)\nxgb_res <-\n  tune_grid(xgb_wf, resamples = ring_folds, grid = 15, control = ctrl_abalone)"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#your-turn-2",
+    "href": "slides/06-tuning-hyperparameters.html#your-turn-2",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Your turn",
+    "text": "Your turn\n\nStart tuning the boosted tree model!\nWe won’t wait for everyone’s tuning to finish, but take this time to get it started before we move on.\n\n\n\n03:00"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#tuning-results-4",
+    "href": "slides/06-tuning-hyperparameters.html#tuning-results-4",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Tuning results ",
+    "text": "Tuning results \n\nxgb_res\n#> # Tuning results\n#> # 5-fold cross-validation using stratification \n#> # A tibble: 5 × 5\n#>   splits             id    .metrics          .notes           .predictions\n#>   <list>             <chr> <list>            <list>           <list>      \n#> 1 <split [2670/670]> Fold1 <tibble [30 × 9]> <tibble [0 × 3]> <tibble>    \n#> 2 <split [2672/668]> Fold2 <tibble [30 × 9]> <tibble [0 × 3]> <tibble>    \n#> 3 <split [2672/668]> Fold3 <tibble [30 × 9]> <tibble [0 × 3]> <tibble>    \n#> 4 <split [2673/667]> Fold4 <tibble [30 × 9]> <tibble [0 × 3]> <tibble>    \n#> 5 <split [2673/667]> Fold5 <tibble [30 × 9]> <tibble [0 × 3]> <tibble>"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#tuning-results-5",
+    "href": "slides/06-tuning-hyperparameters.html#tuning-results-5",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Tuning results ",
+    "text": "Tuning results \n\nautoplot(xgb_res)"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#compare-models",
+    "href": "slides/06-tuning-hyperparameters.html#compare-models",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Compare models",
+    "text": "Compare models\nBest logistic regression results:\n\nspline_res %>% \n  show_best(metric = \"rmse\", n = 1) %>% \n  select(.metric, .estimator, mean, n, std_err, .config)\n#> # A tibble: 1 × 6\n#>   .metric .estimator  mean     n std_err .config             \n#>   <chr>   <chr>      <dbl> <int>   <dbl> <chr>               \n#> 1 rmse    standard    2.18     5  0.0411 Preprocessor9_Model1\n\n\nBest boosting results:\n\nxgb_res %>% \n  show_best(metric = \"rmse\", n = 1) %>% \n  select(.metric, .estimator, mean, n, std_err, .config)\n#> # A tibble: 1 × 6\n#>   .metric .estimator  mean     n std_err .config              \n#>   <chr>   <chr>      <dbl> <int>   <dbl> <chr>                \n#> 1 rmse    standard    2.17     5  0.0589 Preprocessor1_Model14"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#your-turn-3",
+    "href": "slides/06-tuning-hyperparameters.html#your-turn-3",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Your turn",
+    "text": "Your turn\n\nCan you get better RMSE results with xgboost?\nTry increasing learn_rate beyond the original range.\n\n\n\n20:00"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#finalize-and-fit-the-model",
+    "href": "slides/06-tuning-hyperparameters.html#finalize-and-fit-the-model",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Finalize and fit the model  ",
+    "text": "Finalize and fit the model  \n\nbest_rmse <- select_best(spline_res, metric = \"rmse\")\nbest_rmse\n#> # A tibble: 1 × 2\n#>   deg_free .config             \n#>      <int> <chr>               \n#> 1        3 Preprocessor9_Model1"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#finalize-and-fit-the-model-1",
+    "href": "slides/06-tuning-hyperparameters.html#finalize-and-fit-the-model-1",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Finalize and fit the model  ",
+    "text": "Finalize and fit the model  \n\nbest_rmse <- select_best(spline_res, metric = \"rmse\")\n\nfinal_res <-\n  spline_wf %>% \n  finalize_workflow(best_rmse) %>%\n  last_fit(ring_split)\n\nfinal_res\n#> # Resampling results\n#> # Manual resampling \n#> # A tibble: 1 × 6\n#>   splits             id               .metrics .notes   .predictions .workflow \n#>   <list>             <chr>            <list>   <list>   <list>       <list>    \n#> 1 <split [3340/837]> train/test split <tibble> <tibble> <tibble>     <workflow>\n\n\nRemember that last_fit() fits one time with the training set, then evaluates one time with the testing set."
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#your-turn-4",
+    "href": "slides/06-tuning-hyperparameters.html#your-turn-4",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Your turn",
+    "text": "Your turn\n\nFinalize your workflow with the best parameters.\nYou could use either the spline or xgboost workflow.\nCreate a final fit.\n\n\n\n08:00"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#estimates-of-rmse",
+    "href": "slides/06-tuning-hyperparameters.html#estimates-of-rmse",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Estimates of RMSE ",
+    "text": "Estimates of RMSE \nHoldout results from tuning:\n\nspline_res %>% \n  show_best(metric = \"rmse\", n = 1) %>% \n  select(.metric, mean, n, std_err)\n#> # A tibble: 1 × 4\n#>   .metric  mean     n std_err\n#>   <chr>   <dbl> <int>   <dbl>\n#> 1 rmse     2.18     5  0.0411\n\n\nTest set results:\n\nfinal_res %>% collect_metrics()\n#> # A tibble: 2 × 4\n#>   .metric .estimator .estimate .config             \n#>   <chr>   <chr>          <dbl> <chr>               \n#> 1 rmse    standard       2.23  Preprocessor1_Model1\n#> 2 rsq     standard       0.534 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#final-fitted-workflow",
+    "href": "slides/06-tuning-hyperparameters.html#final-fitted-workflow",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Final fitted workflow",
+    "text": "Final fitted workflow\nExtract the final fitted workflow (fit using the training set):\n\nfitted_wf <- extract_workflow(final_res)\n\n# use this object to predict or deploy\npredict(fitted_wf, ring_test[1:3,])\n#> # A tibble: 3 × 1\n#>   .pred\n#>   <dbl>\n#> 1 11.4 \n#> 2  7.82\n#> 3 10.0"
+  },
+  {
+    "objectID": "slides/06-tuning-hyperparameters.html#next-steps",
+    "href": "slides/06-tuning-hyperparameters.html#next-steps",
+    "title": "6 - Tuning Hyperparameters",
+    "section": "Next steps",
+    "text": "Next steps\n\n\nUse explainers to characterize the model and the predictions\nDocument the model\nDeploy the model\nCreate an applicability domain model to help monitor our data over time\n\n\n\n\nhttps://bit.ly/learn-tidymodels"
+  },
+  {
+    "objectID": "slides/07-wrapping-up.html#your-turn",
+    "href": "slides/07-wrapping-up.html#your-turn",
+    "title": "7 - Wrapping up",
+    "section": "Your turn",
+    "text": "Your turn\n\nWhat is one thing you learned that surprised you?\nWhat is one thing you learned that you plan to use?\n\n\n\n05:00"
+  },
+  {
+    "objectID": "slides/07-wrapping-up.html#resources-to-keep-learning",
+    "href": "slides/07-wrapping-up.html#resources-to-keep-learning",
+    "title": "7 - Wrapping up",
+    "section": "Resources to keep learning",
+    "text": "Resources to keep learning\n\n\nhttps://www.tidymodels.org/\n\n\n\n\nhttps://www.tmwr.org/\n\n\n\n\nhttp://www.feat.engineering/\n\n\n\n\nhttps://smltar.com/\n\n\n\nFollow us on Twitter and at the tidyverse blog for updates!\n\n\nhttps://bit.ly/learn-tidymodels"
+  }
+]

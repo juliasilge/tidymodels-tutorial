@@ -1,0 +1,378 @@
+---
+title: "3 - What makes a model?"
+subtitle: "Machine learning with tidymodels"
+format:
+  revealjs: 
+    slide-number: true
+    footer: <https://bit.ly/learn-tidymodels>
+    include-before-body: header.html
+    theme: [default, tutorial.scss]
+    width: 1280
+    height: 720
+knitr:
+  opts_chunk: 
+    echo: true
+    collapse: true
+    comment: "#>"
+---
+
+```{r}
+#| include: false
+#| file: setup.R
+```
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*How do you fit a linear model in R?*
+
+*How many different ways can you think of?*
+
+```{r}
+#| echo: false
+countdown(minutes = 3, id = "how-to-fit-linear-model")
+```
+
+. . .
+
+-   `lm` for linear model
+
+-   `glmnet` for regularized regression
+
+-   `keras` for regression using TensorFlow
+
+-   `stan` for Bayesian regression
+
+-   `spark` for large data sets
+
+##  {background-image="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/main/rstats-artwork/parsnip.png" background-size="contain"}
+
+::: footer
+Artwork by @allison_horst
+:::
+
+## To specify a model `r hexes("parsnip")`
+
+
+-   Choose a [model]{.underline}
+-   Specify an engine
+-   Set the mode
+
+## To specify a model `r hexes("parsnip")`
+
+```{r}
+#| echo: false
+library(tidymodels)
+library(tidyverse)
+abalone <- read_csv("abalone.csv") %>% mutate_if(is.character, as.factor)
+
+set.seed(123)
+ring_split <- initial_split(abalone, prop = 0.8, strata = rings)
+ring_train <- training(ring_split)
+ring_test <- testing(ring_split)
+```
+
+```{r}
+linear_reg()
+```
+
+
+:::notes
+Models have default engines
+:::
+
+## To specify a model `r hexes("parsnip")`
+
+-   Choose a model
+-   Specify an [engine]{.underline}
+-   Set the mode
+
+## To specify a model `r hexes("parsnip")`
+
+```{r}
+linear_reg() %>%
+  set_engine("glmnet")
+```
+
+## To specify a model `r hexes("parsnip")`
+
+```{r}
+linear_reg() %>%
+  set_engine("stan")
+```
+
+## To specify a model `r hexes("parsnip")`
+
+-   Choose a model
+-   Specify an engine
+-   Set the [mode]{.underline}
+
+
+## To specify a model `r hexes("parsnip")`
+
+```{r}
+decision_tree()
+```
+
+:::notes
+Some models have a default mode
+:::
+
+## To specify a model `r hexes("parsnip")`
+
+```{r}
+decision_tree() %>% 
+  set_mode("regression")
+```
+
+. . .
+
+<br></br>
+
+::: r-fit-text
+All available models are listed at <https://www.tidymodels.org/find/parsnip/>
+:::
+
+##  {background-iframe="https://www.tidymodels.org/find/parsnip/"}
+
+::: footer
+:::
+
+## To specify a model `r hexes("parsnip")`
+
+-   Choose a [model]{.underline}
+-   Specify an [engine]{.underline}
+-   Set the [mode]{.underline}
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Run the `tree_spec` chunk in your `.qmd`.*
+
+*Edit this code so it creates a different model, such as linear regression.*
+
+```{r}
+#| echo: false
+countdown(minutes = 5, id = "explore-tree-spec")
+```
+
+<br></br>
+
+::: r-fit-text
+All available models are listed at <https://www.tidymodels.org/find/parsnip/>
+:::
+
+::: notes
+Decision tree:
+
+-   Series of splits or if/then statements based on predictors
+
+-   First the tree *grows* until some condition is met (maximum depth, no more data)
+
+-   Then the tree is *pruned* to reduce its complexity
+
+Linear regression:
+
+
+-   Outcome modeled as linear combination of predictors
+
+-   Find a line that minimizes the mean squared error (MSE)
+
+:::
+
+# A model workflow
+
+##  {background-image="https://media.giphy.com/media/xUA7b0Klw8Wfor7FWo/giphy.gif" background-size="50%"}
+
+## Workflows bind preprocessors and models
+
+![](images/good_workflow.png){fig-align="center"}
+
+
+## What is wrong with this? {.annotation}
+
+![](images/bad_workflow.png){fig-align="center"}
+
+## Why a `workflow()`? `r hexes("workflows")`
+
+::: {.incremental}
+
+-   You can use other preprocessors besides formulas (more on feature engineering later!)
+
+-   They can help organize your work when working with multiple models
+
+-   [Most importantly]{.underline}, a workflow captures the entire modeling process: `fit()` and `predict()` apply to the preprocessing steps in addition to the actual model fit
+
+:::
+
+## A model workflow `r hexes("parsnip", "workflows")` {auto-animate="true"}
+
+```{r}
+tree_spec <- decision_tree(mode = "regression")
+
+tree_spec %>% 
+  fit(rings ~ ., data = ring_train) 
+```
+
+## A model workflow `r hexes("parsnip", "workflows")` {auto-animate="true"}
+
+```{r}
+tree_spec <- decision_tree(mode = "regression")
+
+workflow(rings ~ ., tree_spec) %>% 
+  fit(data = ring_train) 
+```
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Run the `tree_wflow` chunk in your `.qmd`.*
+
+*Edit this code so it uses a linear model.*
+
+```{r}
+#| echo: false
+countdown(minutes = 5, id = "explore-tree-workflow")
+```
+
+## Predict with your model `r hexes("parsnip", "workflows")`
+
+How do you use your new `tree_fit` model?
+
+```{r}
+tree_spec <- decision_tree(mode = "regression")
+
+tree_fit <-
+  workflow(rings ~ ., tree_spec) %>% 
+  fit(data = ring_train) 
+```
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Run:*
+
+`predict(tree_fit, new_data = ring_test)`
+
+*What do you get?*
+
+```{r}
+#| echo: false
+countdown(minutes = 3, id = "predict-tree-fit")
+```
+
+## Your turn
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Run:*
+
+`augment(tree_fit, new_data = ring_test)`
+
+*What do you get?*
+
+```{r}
+#| echo: false
+countdown(minutes = 3, id = "augment-tree-fit")
+```
+
+# The tidymodels prediction guarantee!
+
+. . .
+
+-   The predictions will always be inside a **tibble**
+-   The column names and types are **unsurprising** and **predictable**
+-   The number of rows in `new_data` and the output **are the same**
+
+## Understand your model `r hexes("parsnip", "workflows")`
+
+How do you **understand** your new `tree_fit` model?
+
+. . .
+
+You can use your fitted workflow for model and/or prediction explanations:
+
+::: {.incremental}
+
+-   overall variable importance, such as with the [vip](https://koalaverse.github.io/vip/) package
+
+-   flexible model explainers, such as with the [DALEXtra](https://dalex.drwhy.ai/) package
+
+:::
+
+. . .
+
+Learn more at <https://www.tmwr.org/explain.html>
+
+## Understand your model `r hexes("parsnip", "workflows")`
+
+How do you **understand** your new `tree_fit` model?
+
+```{r}
+#| echo: false
+#| fig-align: center
+library(rpart.plot)
+tree_fit %>%
+  extract_fit_engine(roundint=FALSE) %>%
+  rpart.plot()
+```
+
+## Understand your model `r hexes("parsnip", "workflows")`
+
+How do you **understand** your new `tree_fit` model?
+
+```{r}
+#| eval: false
+library(rpart.plot)
+tree_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot()
+```
+
+You can `extract_*()` several components of your fitted workflow: <https://workflows.tidymodels.org/reference/extract-workflow.html>
+
+. . .
+
+⚠️ Never `predict()` with any extracted components!
+
+
+## Deploy your model `r hexes("vetiver")`
+
+How do you use your new `tree_fit` model in **production**?
+
+```{r}
+library(vetiver)
+v <- vetiver_model(tree_fit, "abalone-rings")
+v
+```
+
+Learn more at <https://vetiver.rstudio.com>
+
+## Deploy your model `r hexes("vetiver")`
+
+How do you use your new model `tree_fit` in **production**?
+
+```{r}
+library(plumber)
+pr() %>%
+  vetiver_api(v)
+```
+
+Learn more at <https://vetiver.rstudio.com>
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Run the `vetiver` chunk in your `.qmd`.*
+
+*Check out the automated visual documentation.*
+
+```{r}
+#| echo: false
+countdown(minutes = 5, id = "vetiver")
+```

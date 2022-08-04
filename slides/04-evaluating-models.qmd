@@ -1,0 +1,680 @@
+---
+title: "4 - Evaluating models"
+subtitle: "Machine learning with tidymodels"
+format:
+  revealjs: 
+    slide-number: true
+    footer: <https://bit.ly/learn-tidymodels>
+    include-before-body: header.html
+    theme: [default, tutorial.scss]
+    width: 1280
+    height: 720
+knitr:
+  opts_chunk: 
+    echo: true
+    collapse: true
+    comment: "#>"
+---
+
+```{r}
+#| include: false
+#| file: setup.R
+```
+
+## Metrics for model performance `r hexes("yardstick")` {auto-animate="true"}
+
+```{r}
+#| echo: false
+library(tidymodels)
+library(tidyverse)
+abalone <- read_csv("abalone.csv") %>% mutate_if(is.character, as.factor)
+
+set.seed(123)
+ring_split <- initial_split(abalone, prop = 0.8, strata = rings)
+ring_train <- training(ring_split)
+ring_test <- testing(ring_split)
+tree_spec <- decision_tree(cost_complexity = 0.001, mode = "regression")
+tree_wflow <- workflow(rings ~ ., tree_spec)
+tree_fit <- fit(tree_wflow, ring_train)
+```
+
+```{r}
+augment(tree_fit, new_data = ring_test) %>%
+  metrics(rings, .pred)
+```
+
+. . .
+
+-   RMSE: difference between the predicted and observed values ⬇️
+-   $R^2$: squared correlation between the predicted and observed values ⬆️
+-   MAE: similar to RMSE, but mean absolute error ⬇️
+
+## Metrics for model performance `r hexes("yardstick")` {auto-animate="true"}
+
+```{r}
+augment(tree_fit, new_data = ring_test) %>%
+  rmse(rings, .pred)
+```
+
+## Metrics for model performance `r hexes("yardstick")` {auto-animate="true"}
+
+```{r}
+augment(tree_fit, new_data = ring_test) %>%
+  group_by(sex) %>%
+  rmse(rings, .pred)
+```
+
+## Metrics for model performance `r hexes("yardstick")` {auto-animate="true"}
+
+```{r}
+abalone_metrics <- metric_set(rmse, mape)
+augment(tree_fit, new_data = ring_test) %>%
+  abalone_metrics(rings, .pred)
+```
+
+##  {background-iframe="https://yardstick.tidymodels.org/reference/index.html"}
+
+::: footer
+:::
+
+## 
+
+::: {.r-fit-text}
+⚠️ DANGERS OF OVERFITTING ⚠️
+:::
+
+## Dangers of overfitting ⚠️
+
+![](https://raw.githubusercontent.com/topepo/2022-nyr-workshop/main/images/tuning-overfitting-train-1.svg)
+
+## Dangers of overfitting ⚠️
+
+![](https://raw.githubusercontent.com/topepo/2022-nyr-workshop/main/images/tuning-overfitting-test-1.svg)
+
+## Dangers of overfitting ⚠️ `r hexes("yardstick")` {auto-animate="true"}
+
+```{r}
+tree_fit %>%
+  augment(ring_train)
+```
+
+We call this "resubstitution" or "repredicting the training set"
+
+## Dangers of overfitting ⚠️ `r hexes("yardstick")` {auto-animate="true"}
+
+```{r}
+tree_fit %>%
+  augment(ring_train) %>%
+  rmse(rings, .pred)
+```
+
+We call this a "resubstitution estimate"
+
+## Dangers of overfitting ⚠️ `r hexes("yardstick")` {auto-animate="true"}
+
+::: columns
+::: {.column width="50%"}
+```{r}
+tree_fit %>%
+  augment(ring_train) %>%
+  rmse(rings, .pred)
+```
+:::
+
+::: {.column width="50%"}
+:::
+:::
+
+## Dangers of overfitting ⚠️ `r hexes("yardstick")`
+
+::: columns
+::: {.column width="50%"}
+```{r}
+tree_fit %>%
+  augment(ring_train) %>%
+  rmse(rings, .pred)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+tree_fit %>%
+  augment(ring_test) %>%
+  rmse(rings, .pred)
+```
+:::
+:::
+
+. . .
+
+⚠️ Remember that we're demonstrating overfitting 
+
+. . .
+
+⚠️ Don't use the test set until the *end* of your modeling analysis
+
+
+##  {background-image="https://media.giphy.com/media/55itGuoAJiZEEen9gg/giphy.gif" background-size="70%"}
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Use `augment()` to compute a regression metric like `mae()`.*
+
+*Compute the metrics for both training and testing data.*
+
+*Notice the evidence of overfitting!* ⚠️
+
+```{r}
+#| echo: false
+countdown(minutes = 5, id = "augment-metrics")
+```
+
+## Dangers of overfitting ⚠️ `r hexes("yardstick")`
+
+::: columns
+::: {.column width="50%"}
+```{r}
+tree_fit %>%
+  augment(ring_train) %>%
+  mae(rings, .pred)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+tree_fit %>%
+  augment(ring_test) %>%
+  mae(rings, .pred)
+```
+:::
+:::
+
+::: {.incremental}
+
+- What if we want to compare more models?
+
+- And/or more model configurations?
+
+- And we want to understand if these are important differences?
+
+:::
+
+# The testing data are precious 💎
+
+# How can we use the *training* data to compare and evaluate different models? 🤔
+
+##  {background-color="white" background-image="https://www.tmwr.org/premade/resampling.svg" background-size="80%"}
+
+## Cross-validation
+
+![](https://www.tmwr.org/premade/three-CV.svg)
+
+## Cross-validation
+
+![](https://www.tmwr.org/premade/three-CV-iter.svg)
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*If we use 10 folds, what percent of the training data*
+
+-   *ends up in analysis*
+-   *ends up in assessment*
+
+*for* **each** *fold?*
+
+
+```{r}
+#| echo: false
+countdown(minutes = 3, id = "percent-in-folds")
+```
+
+## Cross-validation `r hexes("rsample")`
+
+```{r}
+vfold_cv(ring_train) # v = 10 is default
+```
+
+## Cross-validation `r hexes("rsample")`
+
+What is in this?
+
+```{r}
+ring_folds <- vfold_cv(ring_train)
+ring_folds$splits[1:3]
+```
+
+::: notes
+Talk about a list column, storing non-atomic types in dataframe
+:::
+
+## Cross-validation `r hexes("rsample")`
+
+```{r}
+vfold_cv(ring_train, v = 5)
+```
+
+## Cross-validation `r hexes("rsample")`
+
+```{r}
+vfold_cv(ring_train, strata = rings)
+```
+
+. . .
+
+Stratification often helps, with very little downside
+
+## Cross-validation `r hexes("rsample")`
+
+We'll use this setup:
+
+```{r}
+set.seed(234)
+ring_folds <- vfold_cv(ring_train, v = 5, strata = rings)
+ring_folds
+```
+
+. . .
+
+Set the seed when creating resamples
+
+# We are equipped with metrics and resamples!
+
+## Fit our model to the resamples
+
+```{r}
+tree_res <- fit_resamples(tree_wflow, ring_folds)
+tree_res
+```
+
+## Evaluating model performance `r hexes("tune")`
+
+```{r}
+tree_res %>%
+  collect_metrics()
+```
+
+. . .
+
+We can reliably measure performance using only the **training** data 🎉
+
+## Comparing metrics `r hexes("yardstick")`
+
+How do the metrics from resampling compare to the metrics from training and testing?
+
+```{r}
+#| echo: false
+ring_training_rmse <-
+  tree_fit %>%
+  augment(ring_train) %>%
+  rmse(rings, .pred) %>%
+  pull(.estimate) %>%
+  round(digits = 2)
+
+ring_testing_rmse <-
+  tree_fit %>%
+  augment(ring_test) %>%
+  rmse(rings, .pred) %>%
+  pull(.estimate) %>%
+  round(digits = 2)
+```
+
+::: columns
+::: {.column width="50%"}
+```{r}
+tree_res %>%
+  collect_metrics() %>% 
+  select(.metric, mean, std_err)
+```
+:::
+
+::: {.column width="50%"}
+The RMSE previously was
+
+- `r ring_training_rmse` for the training set
+- `r ring_testing_rmse` for test set
+:::
+:::
+
+. . .
+
+Remember that:
+
+⚠️ the training set gives you overly optimistic metrics
+
+⚠️ the test set is precious
+
+## Evaluating model performance `r hexes("tune")`
+
+```{r}
+# save the assessment set results
+ctrl_abalone <- control_resamples(save_pred = TRUE)
+tree_res <- fit_resamples(tree_wflow, ring_folds, control = ctrl_abalone)
+
+tree_preds <- collect_predictions(tree_res)
+tree_preds
+```
+
+## 
+
+```{r}
+#| fig-align: center
+tree_preds %>% 
+  ggplot(aes(rings, .pred, color = id)) + 
+  geom_abline(lty = 2, col = "gray", size = 1.5) +
+  geom_point(alpha = 0.5) +
+  coord_obs_pred()
+```
+
+## Evaluating model performance `r hexes("tune")`
+
+```{r}
+tree_res
+```
+
+
+Where are the fitted models??!??
+
+## Evaluating model performance `r hexes("tune")`
+
+```{r}
+tree_res
+```
+
+
+Where are the fitted models??!??
+🗑️
+
+. . .
+
+For more advanced use cases, you can [extract and save them](https://www.tmwr.org/resampling.html#extract).
+
+## Parallel processing
+
+-   Resampling can involve fitting a lot of models!
+
+-   These models don't depend on one another and can be run in parallel
+
+. . .
+
+We can use a *parallel backend* to do this:
+
+::: columns
+::: {.column width="50%"}
+```{r, eval= FALSE}
+cores <- 
+  parallel::detectCores(logical = FALSE)
+cl <- parallel::makePSOCKcluster(cores)
+doParallel::registerDoParallel(cl)
+
+# Now call `fit_resamples()`!
+
+# Shut it down with:
+foreach::registerDoSEQ()
+parallel::stopCluster(cl)
+```
+:::
+
+::: {.column width="50%"}
+```{r, eval= FALSE}
+doParallel::registerDoParallel()
+
+# Now call `fit_resamples()`!
+
+```
+:::
+:::
+
+# Alternate resampling schemes
+
+## Bootstrapping
+
+![](https://www.tmwr.org/premade/bootstraps.svg)
+
+## Bootstrapping `r hexes("rsample")`
+
+```{r}
+set.seed(123)
+bootstraps(ring_train)
+```
+
+##  {background-iframe="https://rsample.tidymodels.org/reference/index.html"}
+
+::: footer
+:::
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Create:*
+
+-   *bootstrap folds (change `times` from the default)*
+-   *validation set (use the reference guide to find the function)*
+
+*Don't forget to set a seed when you resample!*
+
+```{r}
+#| echo: false
+countdown(minutes = 5, id = "try-rsample")
+```
+
+## Bootstrapping `r hexes("rsample")`
+
+```{r}
+set.seed(322)
+bootstraps(ring_train, times = 10)
+```
+
+## Validation set `r hexes("rsample")`
+
+```{r}
+set.seed(853)
+validation_split(ring_train, strata = rings)
+```
+
+. . .
+
+A validation set is just another type of resample
+
+# Decision tree 🌳
+
+# Random forest 🌳🌲🌴🌵🌴🌳🌳🌴🌲🌵🌴🌲🌳🌴🌳🌵🌵🌴🌲🌲🌳🌴🌳🌴🌲🌴🌵🌴🌲🌴🌵🌲🌵🌴🌲🌳🌴🌵🌳🌴🌳🌴
+
+## Random forest 🌳🌲🌴🌵🌳🌳🌴🌲🌵🌴🌳🌵
+
+- Ensemble many decision tree models
+
+- All the trees vote! 🗳️
+
+- Bootstrap aggregating + random predictor sampling
+
+. . .
+
+Random forest often works well without tuning hyperparameters (more on this later!), as long as there are enough trees
+
+## Create a random forest model `r hexes("parsnip")`
+
+```{r}
+rf_spec <- rand_forest(trees = 1000, mode = "regression")
+rf_spec
+```
+
+## Create a random forest model `r hexes("workflows")`
+
+```{r}
+rf_wflow <- workflow(rings ~ ., rf_spec)
+rf_wflow
+```
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Use `fit_resamples()` and `rf_wflow` to:*
+
+-   *keep predictions*
+-   *compute metrics*
+-   *plot true vs. predicted values*
+
+```{r}
+#| echo: false
+countdown(minutes = 8, id = "try-fit-resamples")
+```
+
+## Evaluating model performance `r hexes("tune")`
+
+```{r}
+ctrl_abalone <- control_resamples(save_pred = TRUE)
+
+# random forest uses random numbers so set the seed first
+
+set.seed(2)
+rf_res <- fit_resamples(rf_wflow, ring_folds, control = ctrl_abalone)
+collect_metrics(rf_res)
+```
+
+## 
+
+```{r}
+#| fig-align: center
+collect_predictions(rf_res) %>% 
+  ggplot(aes(rings, .pred, color = id)) + 
+  geom_abline(lty = 2, col = "gray", size = 1.5) +
+  geom_point(alpha = 0.5) +
+  coord_obs_pred()
+```
+
+# How can we compare multiple model workflows at once? 🧐
+
+
+## Evaluate a workflow set
+
+```{r}
+workflow_set(list(rings ~ .), list(tree_spec, rf_spec))
+```
+
+## Evaluate a workflow set
+
+```{r}
+workflow_set(list(rings ~ .), list(tree_spec, rf_spec)) %>%
+  workflow_map("fit_resamples", resamples = ring_folds)
+```
+
+## Evaluate a workflow set
+
+```{r}
+workflow_set(list(rings ~ .), list(tree_spec, rf_spec)) %>%
+  workflow_map("fit_resamples", resamples = ring_folds) %>%
+  rank_results()
+```
+
+::: {.incremental}
+
+- Change the metric using for ranking with the `rank_metric` to argument
+
+- Lots more available with workflow sets, like `collect_metrics()`, `autoplot()` methods, and more!
+
+:::
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*When do you think a workflow set would be useful?*
+
+```{r}
+#| echo: false
+countdown(minutes = 3, id = "discuss-workflow-sets")
+```
+
+## The final fit `r hexes("tune")`
+
+Suppose that we choose to use our random forest model.
+
+Let's fit the model on the training set and verify our performance using the test set.
+
+. . .
+
+We've shown you `fit()` and `predict()` (+ `augment()`) but there is a shortcut:
+
+```{r}
+# ring_split has train + test info
+final_fit <- last_fit(rf_wflow, ring_split) 
+
+final_fit
+```
+
+## What is in `final_fit`? `r hexes("tune")`
+
+```{r}
+collect_metrics(final_fit)
+```
+
+. . .
+
+These are metrics computed with the **test** set
+
+## What is in `final_fit`? `r hexes("tune")`
+
+```{r}
+collect_predictions(final_fit)
+```
+
+. . .
+
+These are predictions for the **test** set
+
+## 
+
+```{r}
+collect_predictions(final_fit) %>%
+  ggplot(aes(rings, .pred)) + 
+  geom_abline(lty = 2, col = "deeppink4", size = 1.5) +
+  geom_point(alpha = 0.5) +
+  coord_obs_pred()
+```
+
+## What is in `final_fit`? `r hexes("tune")`
+
+```{r}
+extract_workflow(final_fit)
+```
+
+. . .
+
+Use this for **prediction** on new data, like for deploying
+
+## Going farther
+
+```{r}
+decision_tree(mode = "classification")
+```
+
+Working with a classification model?
+
+. . .
+
+- Classification metrics are different, and may be more complicated
+
+- Different classification metrics are appropriate depending on your use case
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Before lunch discussion!*
+
+*Which model do you think you would decide to use?*
+
+*What surprised you the most?*
+
+*What is one thing you are looking forward to next?*
+
+```{r}
+#| echo: false
+countdown(minutes = 5, id = "discuss-which-model")
+```

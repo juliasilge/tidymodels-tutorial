@@ -1,0 +1,288 @@
+---
+title: "2 - Your data budget"
+subtitle: "Machine learning with tidymodels"
+format:
+  revealjs: 
+    slide-number: true
+    footer: <https://bit.ly/learn-tidymodels>
+    include-before-body: header.html
+    theme: [default, tutorial.scss]
+    width: 1280
+    height: 720
+knitr:
+  opts_chunk: 
+    echo: true
+    collapse: true
+    comment: "#>"
+---
+
+```{r}
+#| include: false
+#| file: setup.R
+```
+
+##  {background-image="https://upload.wikimedia.org/wikipedia/commons/0/0b/AbaloneInside.jpg" background-size="70%"}
+
+## Abalone ages
+
+-   Age of abalone can be determined by cutting the shell and counting the number of rings through a microscope
+-   Can other measurements be used to determine age?
+-   Data from _The Population Biology of Abalone (Haliotis species) in Tasmania. I. Blacklip Abalone (H. rubra) from the North Coast and the Islands of Bass Strait_ by Nash et al (1994)
+
+
+```{r}
+library(tidymodels)
+library(tidyverse)
+
+abalone <- read_csv("abalone.csv")
+```
+
+## Abalone ages
+
+-   `N = 4177`
+-   A numeric outcome, `rings`
+-   Other variables to use for prediction:
+    -   `sex` is a **nominal** predictor
+    -   `shucked_weight` and `diameter` are **numeric** predictors
+
+
+
+## Abalone ages
+
+```{r}
+abalone
+```
+
+
+## Data splitting and spending
+
+For machine learning, we typically split data into training and test sets:
+
+. . .
+
+-   The **training set** is used to estimate model parameters.
+-   The **test set** is used to find an independent assessment of model performance.
+
+. . .
+
+Do not 🚫 use the test set during training.
+
+## Data splitting and spending
+
+```{r}
+#| echo: false
+#| fig.width: 12
+#| fig.height: 3
+#| 
+set.seed(123)
+library(forcats)
+one_split <- slice(abalone, 1:30) %>% 
+  initial_split() %>% 
+  tidy() %>% 
+  add_row(Row = 1:30, Data = "Original") %>% 
+  mutate(Data = case_when(
+    Data == "Analysis" ~ "Training",
+    Data == "Assessment" ~ "Testing",
+    TRUE ~ Data
+  )) %>% 
+  mutate(Data = factor(Data, levels = c("Original", "Training", "Testing")))
+all_split <-
+  ggplot(one_split, aes(x = Row, y = fct_rev(Data), fill = Data)) + 
+  geom_tile(color = "white",
+            size = 1) + 
+  scale_fill_manual(values = splits_pal, guide = "none") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = rel(2)),
+        axis.text.x = element_blank(),
+        legend.position = "top",
+        panel.grid = element_blank()) +
+  coord_equal(ratio = 1) +
+  labs(x = NULL, y = NULL)
+all_split
+```
+
+## 
+
+::: {.r-fit-text}
+The more data we spend 🤑
+:::
+
+::: {.r-fit-text}
+the better estimates we'll get.
+:::
+
+## Data splitting and spending
+
+
+::: {.incremental}
+-   Spending too much data in **training** prevents us from computing a good assessment of predictive **performance**.
+
+-   Spending too much data in **testing** prevents us from computing a good estimate of model **parameters**.
+:::
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*When is a good time to split your data?*
+
+```{r}
+#| echo: false
+countdown(minutes = 3, id = "when-to-split")
+```
+
+# The testing data is precious 💎
+
+## Data splitting and spending `r hexes("rsample")`
+
+```{r}
+set.seed(123)
+ring_split <- initial_split(abalone)
+ring_split
+```
+
+:::notes
+How much data in training vs testing?
+This function uses a good default, but this depends on your specific goal/data
+We will talk about more powerful ways of splitting, like stratification, later
+:::
+
+## Accessing the data `r hexes("rsample")`
+
+```{r}
+ring_train <- training(ring_split)
+ring_test <- testing(ring_split)
+```
+
+## The training set`r hexes("rsample")`
+
+```{r}
+ring_train
+```
+
+## The test set `r hexes("rsample")`
+
+```{r}
+ring_test
+```
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Split your data so 20% is held out for the test set.*
+
+*Try out different values in `set.seed()` to see how the results change.*
+
+```{r}
+#| echo: false
+countdown(minutes = 5, id = "try-splitting")
+```
+
+## Data splitting and spending `r hexes("rsample")`
+
+```{r}
+set.seed(123)
+ring_split <- initial_split(abalone, prop = 0.8)
+ring_train <- training(ring_split)
+ring_test <- testing(ring_split)
+
+nrow(ring_train)
+nrow(ring_test)
+```
+
+# What about a validation set?
+
+##  {background-color="white" background-image="https://www.tmwr.org/premade/validation.svg" background-size="50%"}
+
+
+##  {background-color="white" background-image="https://www.tmwr.org/premade/validation-alt.svg" background-size="40%"}
+
+# Exploratory data analysis for ML 🧐
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Explore the `ring_train` data on your own!*
+
+* *What's the distribution of the outcome, rings?*
+* *What's the distribution of numeric variables like weight?*
+* *How do rings differ across sex?*
+
+```{r}
+#| echo: false
+countdown(minutes = 8, id = "explore-rings")
+```
+
+::: notes
+Make a plot or summary and then share with neighbor
+:::
+
+## 
+
+```{r}
+#| fig-align: 'center'
+ggplot(ring_train, aes(rings)) +
+  geom_histogram(bins = 15)
+```
+
+:::notes
+This histogram brings up a concern. What if in our training set we get unlucky and sample few or none of these large values? That could mean that our model wouldn't be able to predict such values. Let's come back to that!
+:::
+
+## 
+
+```{r}
+#| fig-align: 'center'
+ggplot(ring_train, aes(rings, sex, fill = sex)) +
+  geom_boxplot(alpha = 0.5, show.legend = FALSE)
+```
+
+## 
+
+```{r}
+#| fig-align: 'center'
+ring_train %>%
+  ggplot(aes(shucked_weight, rings, color = shell_weight)) +
+  geom_point(alpha = 0.5) +
+  scale_color_viridis_c()
+```
+
+. . .
+
+We can transform our outcome _before_ splitting.
+
+# Split smarter 🤓
+
+##
+
+```{r echo = FALSE}
+#| fig-align: 'center'
+quartiles <- quantile(ring_train$rings, probs = c(1:3)/4)
+ggplot(ring_train, aes(rings)) +
+  geom_histogram(bins = 15) +
+  geom_vline(xintercept = quartiles, color = train_color, 
+             size = 1.5, lty = 2) 
+```
+
+Stratified sampling splits within each quartile
+
+:::notes
+Based on our exploration, we realized that stratifying by rings might help get a consistent distribution. For instance, we'd include high and low rings in both the test and training
+:::
+
+## Stratification
+
+Use `strata = rings`
+
+```{r}
+set.seed(123)
+ring_split <- initial_split(abalone, prop = 0.8, strata = rings)
+ring_train <- training(ring_split)
+ring_test <- testing(ring_split)
+```
+
+. . .
+
+Stratification often helps, with very little downside

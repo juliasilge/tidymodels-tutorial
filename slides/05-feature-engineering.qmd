@@ -1,0 +1,394 @@
+---
+title: "5 - Feature engineering"
+subtitle: "Machine learning with tidymodels"
+format:
+  revealjs: 
+    slide-number: true
+    footer: <https://bit.ly/learn-tidymodels>
+    include-before-body: header.html
+    theme: [default, tutorial.scss]
+    width: 1280
+    height: 720
+knitr:
+  opts_chunk: 
+    echo: true
+    collapse: true
+    comment: "#>"
+---
+
+```{r setup}
+#| include: false
+#| file: setup.R
+```
+
+```{r}
+#| include: false
+doParallel::registerDoParallel()
+
+kable_recipe <- function(rec) {
+  rec %>%
+    prep() %>%
+    juice() %>%
+    head(10) %>%
+    select(rings, everything()) %>%
+    kableExtra::kable(digits = 3) %>%
+    kableExtra::kable_styling(font_size = 20)
+}
+```
+
+
+## Build better predictors 🛠️
+
+::: {.incremental}
+- Some **models** require predictors with certain characteristics or a certain format
+- Some **datasets** are better modeled when one or more predictors are transformed
+:::
+
+##  {background-iframe="https://www.tmwr.org/pre-proc-table.html#tab:preprocessing"}
+
+::: footer
+:::
+
+##  {background-image="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/main/rstats-artwork/recipes.png" background-size="contain"}
+
+::: footer
+Artwork by @allison_horst
+:::
+
+## Build better predictors 🛠️ `r hexes("recipes")`
+
+::: {.incremental}
+
+- Statistical parameters for recipe steps can be _estimated_ from an initial data set and then _applied_ to other data sets
+
+- The resulting features can be used as inputs for statistical or machine learning models
+
+:::
+
+## Abalone data spending `r hexes("rsample")` 
+
+```{r split}
+library(tidymodels)
+library(tidyverse)
+abalone <- read_csv("abalone.csv") %>% mutate_if(is.character, as.factor)
+
+set.seed(123)
+ring_split <- initial_split(abalone, prop = 0.8, strata = rings)
+ring_train <- training(ring_split)
+ring_test <- testing(ring_split)
+
+set.seed(234)
+ring_folds <- vfold_cv(ring_train, v = 5, strata = rings)
+ring_folds
+```
+
+
+## A first recipe `r hexes("recipes")`
+
+```{r}
+ring_rec <- 
+  recipe(rings ~ ., data = ring_train)
+```
+
+. . .
+
+The `recipe()` function assigns columns to roles of "outcome" or "predictor" using the formula
+
+## A first recipe `r hexes("recipes")`
+
+```{r}
+summary(ring_rec)
+```
+
+## A first recipe `r hexes("recipes")`
+
+```{r}
+ring_rec <- 
+  recipe(rings ~ ., data = ring_train)
+```
+
+
+## Create indicator variables `r hexes("recipes")`
+
+```{r}
+#| code-line-numbers: "3"
+ring_rec <- 
+  recipe(rings ~ ., data = ring_train) %>% 
+  step_dummy(all_nominal_predictors())
+```
+
+. . .
+
+```{r}
+#| echo: false
+kable_recipe(ring_rec)
+```
+
+
+## Normalization `r hexes("recipes")`
+
+```{r rec-norm}
+#| code-line-numbers: "4"
+ring_rec <- 
+  recipe(rings ~ ., data = ring_train) %>% 
+  step_dummy(all_nominal_predictors()) %>% 
+  step_normalize(all_numeric_predictors())
+```
+
+. . .
+
+```{r}
+#| echo: false
+kable_recipe(ring_rec)
+```
+
+
+## Reduce correlation `r hexes("recipes")`
+
+```{r }
+#| code-line-numbers: "5"
+ring_rec <- 
+  recipe(rings ~ ., data = ring_train) %>% 
+  step_dummy(all_nominal_predictors()) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_corr(all_numeric_predictors(), threshold = 0.9)
+```
+
+. . .
+
+```{r}
+#| echo: false
+kable_recipe(ring_rec)
+```
+
+
+## Dimensionality reduction `r hexes("recipes")`
+
+```{r}
+#| code-line-numbers: "5"
+ring_rec <- 
+  recipe(rings ~ ., data = ring_train) %>% 
+  step_dummy(all_nominal_predictors()) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_numeric_predictors())
+```
+
+. . .
+
+```{r}
+#| echo: false
+kable_recipe(ring_rec)
+```
+
+
+## Build nonlinear features `r hexes("recipes")`
+
+```{r}
+#| code-line-numbers: "5"
+ring_rec <- 
+  recipe(rings ~ ., data = ring_train) %>% 
+  step_dummy(all_nominal_predictors()) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_ns(shucked_weight, deg_free = 4)
+```
+
+. . .
+
+```{r}
+#| echo: false
+kable_recipe(ring_rec)
+```
+
+
+##  {background-iframe="https://recipes.tidymodels.org/reference/index.html"}
+
+::: footer
+:::
+
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Create a `recipe()` for the abalone data to :*
+
+-   *create one-hot indicator variables*
+-   *remove zero-variance variables*
+
+```{r}
+#| echo: false
+countdown(minutes = 3, id = "make-recipe")
+```
+
+
+## Minimal recipe `r hexes("recipes")`
+
+```{r}
+ring_rec <-
+  recipe(rings ~ ., data = ring_train) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_normalize(all_numeric_predictors())
+```
+
+## Using a workflow `r hexes("recipes", "workflows", "parsnip", "tune")`
+
+```{r}
+set.seed(3)
+
+lm_wf <- workflow(ring_rec, linear_reg()) 
+ctrl_abalone <- control_resamples(save_pred = TRUE)
+lm_res <- fit_resamples(lm_wf, ring_folds, control = ctrl_abalone)
+
+collect_metrics(lm_res)
+```
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Use `fit_resamples()` to fit your workflow with a recipe.*
+
+*Collect the predictions from the results.*
+
+
+```{r}
+#| echo: false
+countdown(minutes = 5, id = "resample-recipe")
+```
+
+
+## Holdout predictions `r hexes("recipes", "workflows", "parsnip", "tune")`
+
+```{r}
+# since we used `save_pred = TRUE`
+ring_lm_preds <- collect_predictions(lm_res)
+ring_lm_preds %>% group_by(id) %>% slice(1:3)
+```
+
+
+## Recipes are estimated `r hexes("recipes")`
+
+Preprocessing steps in a recipe use the *training set* to compute quantities
+
+. . .
+
+What kind of quantities are computed for preprocessing?
+
+-   Levels of a factor
+-   Whether a column has zero variance
+-   Mean and standard deviation for normalization
+-   How to map variables to principal components
+
+. . .
+
+When using a workflow, this estimation occurs with `fit()`
+
+
+## Fit different recipes `r hexes("recipes", "workflows", "parsnip", "tune")`
+
+A workflow set can cross models and/or preprocessors:
+
+```{r}
+set.seed(1)
+
+abalone_set_res <-
+  workflow_set(
+    list(
+      indicators = ring_rec, 
+      decorr = ring_rec %>% step_corr(all_numeric_predictors(), threshold = 0.9), 
+      splines = ring_rec %>% step_ns(shucked_weight, deg_free = 4), 
+      pca = ring_rec %>% step_pca(all_numeric_predictors())
+    ),
+    list(lm = linear_reg())
+  ) %>%
+  workflow_map(
+    fn = "fit_resamples", 
+    resamples = ring_folds, 
+    verbose = TRUE, 
+    control = ctrl_abalone
+  )
+```
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*Create a workflow set with 2 or 3 recipes.*
+
+*(Consider using recipes we've already created.)*
+
+*Use `workflow_map()` to resample the workflow set.* 
+
+```{r}
+#| echo: false
+countdown(minutes = 8, id = "abalone-wfset")
+```
+
+
+## Compare recipes 
+
+```{r}
+#| out-width: '100%'
+#| output-location: slide
+#| fig-align: center
+
+library(forcats)
+collect_metrics(abalone_set_res) %>%
+  filter(.metric == "rmse") %>%
+  ggplot(aes(x = mean, y = fct_reorder(wflow_id, mean))) +
+  geom_crossbar(aes(xmin = mean - std_err, xmax = mean + std_err)) +
+  labs(y = NULL, x = "RMSE (holdout sets)")
+```
+
+
+## More on using recipes `r hexes("recipes")`
+
+::: {.incremental}
+
+-   Find recipe steps at <https://www.tidymodels.org/find/recipes/>
+
+-   You can [skip](https://recipes.tidymodels.org/articles/Skipping.html) some steps on new data
+
+-   The [order](https://recipes.tidymodels.org/articles/Ordering.html) of recipe steps matters
+
+-   What happens when a recipe goes wrong? 😱
+
+:::
+
+## What happens when a recipe goes wrong? 😱 
+
+::: {.incremental}
+
+- We recommend that you use a `workflow()` to estimate and apply a recipe
+
+- There are two lower-level functions for handling a recipe on its own, like for debugging
+
+:::
+
+. . .
+
+<center>
+
+`fit()` ➡️ `prep()`
+
+`predict()` ➡️ `bake()`
+
+</center>
+
+# `fit()` ➡️ `prep()`
+
+# `predict()` ➡️ `bake()`
+
+## Your turn {transition="slide-in"}
+
+![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
+
+*First use `prep()` on one of your recipes.*
+
+*Then use `bake()`!*
+
+```{r}
+#| echo: false
+countdown(minutes = 5, id = "prep-bake")
+```
+

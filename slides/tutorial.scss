@@ -1,0 +1,11 @@
+/*-- scss:defaults --*/
+
+// https://quarto.org/docs/presentations/revealjs/themes.html#saas-variables
+// https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss
+
+/*-- scss:rules --*/
+
+// When `#| output-location: column` is set, it is no longer 100% height
+.reveal .column-output-location .column:first-of-type div.sourceCode {
+  height: unset !important;
+}

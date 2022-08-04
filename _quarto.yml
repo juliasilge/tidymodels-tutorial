@@ -1,0 +1,39 @@
+project:
+  type: website
+  render:
+    - "index.qmd"
+    - "slides/*qmd"
+    - "!classwork/"
+    - "!CODE_OF_CONDUCT.md"
+  output-dir: docs
+
+website:
+  title: "Machine learning with tidymodels"
+  description: "This one-day workshop provides an introduction to machine learning with R using the tidymodels framework, a collection of packages for modeling and machine learning using tidyverse principles."
+  open-graph: true
+  twitter-card: true
+  site-url: https://bit.ly/learn-tidymodels
+  repo-url: https://github.com/juliasilge/tidymodels-tutorial
+  repo-actions: [edit, issue]
+  favicon: "favicon.ico"
+
+  navbar:
+    background: "#563c5c"
+    pinned: true
+    logo: tidymodels.png
+    right:
+      - text: Learn more
+        menu:
+          - href: https://www.tidymodels.org/start/
+            text: "Get started at tidymodels.org"
+          - href: https://www.tmwr.org/
+            text: "Tidy Modeling with R"
+          - href: https://supervised-ml-course.netlify.app/
+            text: "Online interactive course"
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+
+fig-format: svg
