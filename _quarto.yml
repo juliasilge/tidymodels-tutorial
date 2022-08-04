@@ -6,6 +6,9 @@ project:
     - "!classwork/"
     - "!CODE_OF_CONDUCT.md"
   output-dir: docs
+  resources:
+    - "slides/abalone.csv"
+
 
 website:
   title: "Machine learning with tidymodels"
