@@ -145,7 +145,7 @@ kable_recipe(ring_rec)
 
 ## Reduce correlation `r hexes("recipes")`
 
-```{r }
+```{r}
 #| code-line-numbers: "5"
 ring_rec <- 
   recipe(rings ~ ., data = ring_train) %>% 

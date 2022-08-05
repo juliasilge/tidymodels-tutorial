@@ -1,0 +1,356 @@
+---
+title: "Classwork 2"
+subtitle: "Machine learning with tidymodels"
+editor_options: 
+  chunk_output_type: console
+---
+
+## Data on abalone ages
+
+```{r}
+library(tidymodels)
+library(tidyverse)
+
+url <- "https://bit.ly/tidymodels-abalone-csv"
+abalone <- read_csv(url) %>% mutate_if(is.character, as.factor)
+
+set.seed(123)
+ring_split <- initial_split(abalone, prop = 0.8, strata = rings)
+ring_train <- training(ring_split)
+ring_test <- testing(ring_split)
+
+set.seed(234)
+ring_folds <- vfold_cv(ring_train, v = 5, strata = rings)
+ring_folds
+```
+
+## A first recipe
+
+```{r}
+ring_rec <- 
+  recipe(rings ~ ., data = ring_train)
+
+summary(ring_rec)
+```
+
+## Create indicator variables
+
+```{r}
+ring_rec_1 <- 
+  ring_rec %>% 
+  step_dummy(all_nominal_predictors())
+```
+
+## Normalization
+
+```{r}
+ring_rec_2 <- 
+  ring_rec_1 %>% 
+  step_normalize(all_numeric_predictors())
+```
+
+## Reduce correlation
+
+```{r}
+ring_rec_3 <- 
+  ring_rec_2 %>% 
+  step_corr(all_numeric_predictors(), threshold = 0.9)
+```
+
+## Dimensionality reduction
+
+```{r}
+ring_rec_4 <- 
+  ring_rec_2 %>% 
+  step_pca(all_numeric_predictors())
+```
+
+## Build nonlinear features 
+
+```{r}
+ring_rec_4 <- 
+  ring_rec_2 %>% 
+  step_ns(shucked_weight, deg_free = 4)
+```
+
+## Your turn
+
+Create a `recipe()` for the abalone data to:
+
+-   create one-hot indicator variables
+-   remove zero-variance variables
+
+<https://recipes.tidymodels.org/reference/>
+
+```{r}
+# your code here!
+
+```
+
+## Minimal recipe
+
+```{r}
+ring_rec <-
+  recipe(rings ~ ., data = ring_train) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_normalize(all_numeric_predictors())
+```
+
+## Using a workflow
+
+```{r}
+set.seed(3)
+
+lm_wf <- workflow(ring_rec, linear_reg()) 
+ctrl_abalone <- control_resamples(save_pred = TRUE)
+lm_res <- fit_resamples(lm_wf, ring_folds, control = ctrl_abalone)
+
+collect_metrics(lm_res)
+```
+
+## Your turn
+
+Use `fit_resamples()` to fit your workflow with a recipe.
+
+Collect the predictions from the results.
+
+```{r}
+# your code here!
+
+```
+
+## Holdout predictions
+
+```{r}
+# since we used `save_pred = TRUE`
+ring_lm_preds <- collect_predictions(lm_res)
+ring_lm_preds %>% group_by(id) %>% slice(1:3)
+```
+
+## Fit different recipes
+
+```{r}
+set.seed(1)
+
+abalone_set_res <-
+  workflow_set(
+    list(
+      indicators = ring_rec, 
+      decorr = ring_rec %>% step_corr(all_numeric_predictors(), threshold = 0.9), 
+      splines = ring_rec %>% step_ns(shucked_weight, deg_free = 4), 
+      pca = ring_rec %>% step_pca(all_numeric_predictors())
+    ),
+    list(lm = linear_reg())
+  ) %>%
+  workflow_map(
+    fn = "fit_resamples", 
+    resamples = ring_folds, 
+    verbose = TRUE, 
+    control = ctrl_abalone
+  )
+```
+
+## Your turn
+
+Create a workflow set with 2 or 3 recipes.
+
+(Consider using recipes we've already created.)
+
+Use `workflow_map()` to resample the workflow set.
+
+```{r}
+# your code here!
+
+```
+
+## Compare recipes 
+
+```{r}
+collect_metrics(abalone_set_res) %>%
+  filter(.metric == "rmse") %>%
+  ggplot(aes(x = mean, y = fct_reorder(wflow_id, mean))) +
+  geom_crossbar(aes(xmin = mean - std_err, xmax = mean + std_err)) +
+  labs(y = NULL, x = "RMSE (holdout sets)")
+```
+
+## Your turn
+
+First use `prep()` on one of your recipes.
+
+Then use `bake()`!
+
+```{r}
+# your code here!
+
+```
+
+## Choose the best parameter
+
+```{r}
+ring_rec <-
+  recipe(rings ~ ., data = ring_train) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_ns(shucked_weight, deg_free = tune())
+```
+
+```{r}
+spline_wf <- workflow(ring_rec, linear_reg())
+spline_wf
+```
+
+```{r}
+set.seed(123)
+spline_res <- tune_grid(spline_wf, ring_folds)
+spline_res
+```
+
+## Your turn 
+
+Use `tune_grid()` to tune your workflow with a recipe.
+
+Collect the metrics from the results.
+
+Use `autoplot()` to visualize the results.
+
+Try `show_best()` to understand which parameter values are best.
+
+```{r}
+# your code here!
+
+```
+
+## Tuning results 
+
+```{r}
+collect_metrics(spline_res)
+
+collect_metrics(spline_res, summarize = FALSE)
+```
+
+```{r}
+autoplot(spline_res, metric = "rmse")
+```
+
+```{r}
+show_best(spline_res)
+```
+
+## Build an xgboost workflow
+
+```{r}
+xgb_spec <-
+  boost_tree(
+    trees = 500, min_n = tune(), stop_iter = tune(), tree_depth = tune(),
+    learn_rate = tune(), loss_reduction = tune()
+  ) %>%
+  set_mode("regression") %>% 
+  set_engine("xgboost", validation = 0.1)
+
+xgb_rec <- 
+  recipe(rings ~ ., data = ring_train) %>%
+  step_dummy(all_nominal_predictors())
+
+xgb_wf <- workflow(xgb_rec, xgb_spec) 
+```
+
+## Your turn 
+
+Create your boosted tree workflow.
+
+```{r}
+# your code here!
+
+```
+
+## Tuning
+
+```{r}
+set.seed(9)
+ctrl_abalone <- control_grid(save_pred = TRUE)
+xgb_res <-
+  tune_grid(xgb_wf, resamples = ring_folds, grid = 15, control = ctrl_abalone)
+```
+
+## Your turn 
+
+Start tuning the boosted tree model!
+
+```{r}
+# your code here!
+
+```
+
+## Tuning results
+
+```{r}
+autoplot(xgb_res)
+```
+
+## Compare models
+
+Best logistic regression results:
+
+```{r}
+spline_res %>% 
+  show_best(metric = "rmse", n = 1) %>% 
+  select(.metric, .estimator, mean, n, std_err, .config)
+```
+
+```{r}
+xgb_res %>% 
+  show_best(metric = "rmse", n = 1) %>% 
+  select(.metric, .estimator, mean, n, std_err, .config)
+```
+
+## Your turn
+
+Can you get better RMSE results with xgboost?
+
+Try increasing `learn_rate` beyond the original range.
+
+```{r}
+# your code here!
+
+```
+
+## Finalize and fit the model
+
+```{r}
+best_rmse <- select_best(spline_res, metric = "rmse")
+
+final_res <-
+  spline_wf %>% 
+  finalize_workflow(best_rmse) %>%
+  last_fit(ring_split)
+
+final_res
+```
+
+## Your turn
+
+Finalize your workflow with the best parameters.
+
+You could use either the spline or xgboost workflow.
+
+Create a final fit.
+
+## Estimates of RMSE
+
+```{r}
+# holdout results from tuning
+spline_res %>% 
+  show_best(metric = "rmse", n = 1) 
+
+# test set results
+final_res %>% collect_metrics()
+```
+
+## Final fitted workflow
+
+```{r}
+fitted_wf <- extract_workflow(final_res)
+
+# use this object to predict or deploy
+predict(fitted_wf, ring_test[1:3,])
+```
+
