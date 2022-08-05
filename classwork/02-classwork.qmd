@@ -309,7 +309,12 @@ Can you get better RMSE results with xgboost?
 Try increasing `learn_rate` beyond the original range.
 
 ```{r}
-# your code here!
+# your code here! start by creating a new grid:
+
+xgb_wf %>% 
+  extract_parameter_set_dials() %>% 
+  update(learn_rate = learn_rate(c(-5, 0))) %>%
+  grid_latin_hypercube(size = 15)
 
 ```
 
