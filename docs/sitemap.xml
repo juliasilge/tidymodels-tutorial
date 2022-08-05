@@ -2,34 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://bit.ly/learn-tidymodels/index.html</loc>
-    <lastmod>2022-08-05T03:13:40.064Z</lastmod>
+    <lastmod>2022-08-05T03:31:12.007Z</lastmod>
   </url>
   <url>
     <loc>https://bit.ly/learn-tidymodels/slides/01-introduction.html</loc>
-    <lastmod>2022-08-05T03:13:42.050Z</lastmod>
+    <lastmod>2022-08-05T03:31:13.942Z</lastmod>
   </url>
   <url>
     <loc>https://bit.ly/learn-tidymodels/slides/02-data-budget.html</loc>
-    <lastmod>2022-08-05T03:13:45.014Z</lastmod>
+    <lastmod>2022-08-05T03:31:16.739Z</lastmod>
   </url>
   <url>
     <loc>https://bit.ly/learn-tidymodels/slides/03-what-makes-a-model.html</loc>
-    <lastmod>2022-08-05T03:13:47.756Z</lastmod>
+    <lastmod>2022-08-05T03:31:19.415Z</lastmod>
   </url>
   <url>
     <loc>https://bit.ly/learn-tidymodels/slides/04-evaluating-models.html</loc>
-    <lastmod>2022-08-05T03:14:16.513Z</lastmod>
+    <lastmod>2022-08-05T03:31:48.213Z</lastmod>
   </url>
   <url>
     <loc>https://bit.ly/learn-tidymodels/slides/05-feature-engineering.html</loc>
-    <lastmod>2022-08-05T03:14:21.595Z</lastmod>
+    <lastmod>2022-08-05T03:31:53.258Z</lastmod>
   </url>
   <url>
     <loc>https://bit.ly/learn-tidymodels/slides/06-tuning-hyperparameters.html</loc>
-    <lastmod>2022-08-05T03:14:44.963Z</lastmod>
+    <lastmod>2022-08-05T03:34:04.687Z</lastmod>
   </url>
   <url>
     <loc>https://bit.ly/learn-tidymodels/slides/07-wrapping-up.html</loc>
-    <lastmod>2022-08-05T03:14:45.917Z</lastmod>
+    <lastmod>2022-08-05T03:32:17.592Z</lastmod>
   </url>
 </urlset>

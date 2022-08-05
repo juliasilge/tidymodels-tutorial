@@ -236,7 +236,7 @@ Nope
 
 - You can control the grid used to search the parameter space
 
-- Use the `grid_*()` functions, or create your own tibble
+- Use the `grid_*()` functions, create your own tibble, or `extract_parameter_set_dials()` from your workflow
 
 . . .
 
@@ -248,8 +248,7 @@ tibble(deg_free = 1:10)
 
 - You can control the grid used to search the parameter space
 
-- Use the `grid_*()` functions, or create your own tibble
-
+- Use the `grid_*()` functions, create your own tibble, or `extract_parameter_set_dials()` from your workflow
 
 ```{r}
 grid_regular(list(deg_free = spline_degree()), levels = 5)
@@ -259,19 +258,28 @@ grid_regular(list(deg_free = spline_degree()), levels = 5)
 
 - You can control the grid used to search the parameter space
 
-- Use the `grid_*()` functions, or create your own tibble
-
+- Use the `grid_*()` functions, create your own tibble, or `extract_parameter_set_dials()` from your workflow
 
 ```{r}
-grid_regular(list(deg_free = spline_degree(), tree_depth()), levels = 5)
+extract_parameter_set_dials(spline_wf) %>%
+  grid_regular(levels = 5)
 ```
 
 ## Customize grid search `r hexes("dials")` {auto-animate="true"}
 
 - You can control the grid used to search the parameter space
 
-- Use the `grid_*()` functions, or create your own tibble
+- Use the `grid_*()` functions, create your own tibble, or `extract_parameter_set_dials()` from your workflow
 
+```{r}
+grid_regular(list(deg_free = spline_degree(), tree_depth()), levels = 3)
+```
+
+## Customize grid search `r hexes("dials")` {auto-animate="true"}
+
+- You can control the grid used to search the parameter space
+
+- Use the `grid_*()` functions, create your own tibble, or `extract_parameter_set_dials()` from your workflow
 
 ```{r}
 grid_latin_hypercube(list(deg_free = spline_degree(), tree_depth()), size = 5)
