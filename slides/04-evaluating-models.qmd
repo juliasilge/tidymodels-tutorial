@@ -34,8 +34,8 @@ ring_split <- initial_split(abalone, prop = 0.8, strata = rings)
 ring_train <- training(ring_split)
 ring_test <- testing(ring_split)
 tree_spec <- decision_tree(cost_complexity = 0.001, mode = "regression")
-tree_wflow <- workflow(rings ~ ., tree_spec)
-tree_fit <- fit(tree_wflow, ring_train)
+tree_wf <- workflow(rings ~ ., tree_spec)
+tree_fit <- fit(tree_wf, ring_train)
 ```
 
 ```{r}
@@ -286,7 +286,7 @@ Set the seed when creating resamples
 ## Fit our model to the resamples
 
 ```{r}
-tree_res <- fit_resamples(tree_wflow, ring_folds)
+tree_res <- fit_resamples(tree_wf, ring_folds)
 tree_res
 ```
 
@@ -352,7 +352,7 @@ Remember that:
 ```{r}
 # save the assessment set results
 ctrl_abalone <- control_resamples(save_pred = TRUE)
-tree_res <- fit_resamples(tree_wflow, ring_folds, control = ctrl_abalone)
+tree_res <- fit_resamples(tree_wf, ring_folds, control = ctrl_abalone)
 
 tree_preds <- collect_predictions(tree_res)
 tree_preds
@@ -506,15 +506,15 @@ rf_spec
 ## Create a random forest model `r hexes("workflows")`
 
 ```{r}
-rf_wflow <- workflow(rings ~ ., rf_spec)
-rf_wflow
+rf_wf <- workflow(rings ~ ., rf_spec)
+rf_wf
 ```
 
 ## Your turn {transition="slide-in"}
 
 ![](images/parsnip-flagger.jpg){.absolute top="0" right="0" width="150" height="150"}
 
-*Use `fit_resamples()` and `rf_wflow` to:*
+*Use `fit_resamples()` and `rf_wf` to:*
 
 -   *keep predictions*
 -   *compute metrics*
@@ -533,7 +533,7 @@ ctrl_abalone <- control_resamples(save_pred = TRUE)
 # random forest uses random numbers so set the seed first
 
 set.seed(2)
-rf_res <- fit_resamples(rf_wflow, ring_folds, control = ctrl_abalone)
+rf_res <- fit_resamples(rf_wf, ring_folds, control = ctrl_abalone)
 collect_metrics(rf_res)
 ```
 
@@ -603,7 +603,7 @@ We've shown you `fit()` and `predict()` (+ `augment()`) but there is a shortcut:
 
 ```{r}
 # ring_split has train + test info
-final_fit <- last_fit(rf_wflow, ring_split) 
+final_fit <- last_fit(rf_wf, ring_split) 
 
 final_fit
 ```

@@ -8,6 +8,7 @@ project:
   output-dir: docs
   resources:
     - "slides/abalone.csv"
+    - "abalone.csv"
 
 
 website:

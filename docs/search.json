@@ -102,7 +102,7 @@
     "href": "slides/01-introduction.html#what-is-tidymodels",
     "title": "1 - Introduction",
     "section": "What is tidymodels? ",
-    "text": "What is tidymodels? \n\nlibrary(tidymodels)\n#> ── Attaching packages ──────────────────────────── tidymodels 1.0.0 ──\n#> ✔ broom        1.0.0     ✔ rsample      1.0.0\n#> ✔ dials        1.0.0     ✔ tibble       3.1.8\n#> ✔ dplyr        1.0.9     ✔ tidyr        1.2.0\n#> ✔ infer        1.0.2     ✔ tune         1.0.0\n#> ✔ modeldata    1.0.0     ✔ workflows    1.0.0\n#> ✔ parsnip      1.0.0     ✔ workflowsets 1.0.0\n#> ✔ purrr        0.3.4     ✔ yardstick    1.0.0\n#> ✔ recipes      1.0.1\n#> ── Conflicts ─────────────────────────────── tidymodels_conflicts() ──\n#> ✖ purrr::discard() masks scales::discard()\n#> ✖ dplyr::filter()  masks stats::filter()\n#> ✖ dplyr::lag()     masks stats::lag()\n#> ✖ recipes::step()  masks stats::step()\n#> • Learn how to get started at https://www.tidymodels.org/start/"
+    "text": "What is tidymodels? \n\nlibrary(tidymodels)\n#> ── Attaching packages ──────────────────────────── tidymodels 1.0.0 ──\n#> ✔ broom        1.0.0     ✔ rsample      1.0.0\n#> ✔ dials        1.0.0     ✔ tibble       3.1.8\n#> ✔ dplyr        1.0.9     ✔ tidyr        1.2.0\n#> ✔ infer        1.0.2     ✔ tune         1.0.0\n#> ✔ modeldata    1.0.0     ✔ workflows    1.0.0\n#> ✔ parsnip      1.0.0     ✔ workflowsets 1.0.0\n#> ✔ purrr        0.3.4     ✔ yardstick    1.0.0\n#> ✔ recipes      1.0.1\n#> ── Conflicts ─────────────────────────────── tidymodels_conflicts() ──\n#> ✖ purrr::discard() masks scales::discard()\n#> ✖ dplyr::filter()  masks stats::filter()\n#> ✖ dplyr::lag()     masks stats::lag()\n#> ✖ recipes::step()  masks stats::step()\n#> • Dig deeper into tidy modeling with R at https://www.tmwr.org"
   },
   {
     "objectID": "slides/01-introduction.html#lets-install-some-packages",
@@ -592,7 +592,7 @@
     "href": "slides/04-evaluating-models.html#fit-our-model-to-the-resamples",
     "title": "4 - Evaluating models",
     "section": "Fit our model to the resamples",
-    "text": "Fit our model to the resamples\n\ntree_res <- fit_resamples(tree_wflow, ring_folds)\ntree_res\n#> # Resampling results\n#> # 5-fold cross-validation using stratification \n#> # A tibble: 5 × 4\n#>   splits             id    .metrics         .notes          \n#>   <list>             <chr> <list>           <list>          \n#> 1 <split [2670/670]> Fold1 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 2 <split [2672/668]> Fold2 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 3 <split [2672/668]> Fold3 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 4 <split [2673/667]> Fold4 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 5 <split [2673/667]> Fold5 <tibble [2 × 4]> <tibble [0 × 3]>"
+    "text": "Fit our model to the resamples\n\ntree_res <- fit_resamples(tree_wf, ring_folds)\ntree_res\n#> # Resampling results\n#> # 5-fold cross-validation using stratification \n#> # A tibble: 5 × 4\n#>   splits             id    .metrics         .notes          \n#>   <list>             <chr> <list>           <list>          \n#> 1 <split [2670/670]> Fold1 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 2 <split [2672/668]> Fold2 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 3 <split [2672/668]> Fold3 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 4 <split [2673/667]> Fold4 <tibble [2 × 4]> <tibble [0 × 3]>\n#> 5 <split [2673/667]> Fold5 <tibble [2 × 4]> <tibble [0 × 3]>"
   },
   {
     "objectID": "slides/04-evaluating-models.html#evaluating-model-performance",
@@ -613,7 +613,7 @@
     "href": "slides/04-evaluating-models.html#evaluating-model-performance-1",
     "title": "4 - Evaluating models",
     "section": "Evaluating model performance ",
-    "text": "Evaluating model performance \n\n# save the assessment set results\nctrl_abalone <- control_resamples(save_pred = TRUE)\ntree_res <- fit_resamples(tree_wflow, ring_folds, control = ctrl_abalone)\n\ntree_preds <- collect_predictions(tree_res)\ntree_preds\n#> # A tibble: 3,340 × 5\n#>    id    .pred  .row rings .config             \n#>    <chr> <dbl> <int> <dbl> <chr>               \n#>  1 Fold1  7.79     1     7 Preprocessor1_Model1\n#>  2 Fold1  8.39     3     7 Preprocessor1_Model1\n#>  3 Fold1  7.06    10     7 Preprocessor1_Model1\n#>  4 Fold1  9.92    23     7 Preprocessor1_Model1\n#>  5 Fold1  9.93    24     8 Preprocessor1_Model1\n#>  6 Fold1  7.06    25     7 Preprocessor1_Model1\n#>  7 Fold1  7.06    30     8 Preprocessor1_Model1\n#>  8 Fold1  8.74    34     8 Preprocessor1_Model1\n#>  9 Fold1  9.47    38     8 Preprocessor1_Model1\n#> 10 Fold1  4.36    39     5 Preprocessor1_Model1\n#> # … with 3,330 more rows\n#> # ℹ Use `print(n = ...)` to see more rows"
+    "text": "Evaluating model performance \n\n# save the assessment set results\nctrl_abalone <- control_resamples(save_pred = TRUE)\ntree_res <- fit_resamples(tree_wf, ring_folds, control = ctrl_abalone)\n\ntree_preds <- collect_predictions(tree_res)\ntree_preds\n#> # A tibble: 3,340 × 5\n#>    id    .pred  .row rings .config             \n#>    <chr> <dbl> <int> <dbl> <chr>               \n#>  1 Fold1  7.79     1     7 Preprocessor1_Model1\n#>  2 Fold1  8.39     3     7 Preprocessor1_Model1\n#>  3 Fold1  7.06    10     7 Preprocessor1_Model1\n#>  4 Fold1  9.92    23     7 Preprocessor1_Model1\n#>  5 Fold1  9.93    24     8 Preprocessor1_Model1\n#>  6 Fold1  7.06    25     7 Preprocessor1_Model1\n#>  7 Fold1  7.06    30     8 Preprocessor1_Model1\n#>  8 Fold1  8.74    34     8 Preprocessor1_Model1\n#>  9 Fold1  9.47    38     8 Preprocessor1_Model1\n#> 10 Fold1  4.36    39     5 Preprocessor1_Model1\n#> # … with 3,330 more rows\n#> # ℹ Use `print(n = ...)` to see more rows"
   },
   {
     "objectID": "slides/04-evaluating-models.html#section-4",
@@ -697,21 +697,21 @@
     "href": "slides/04-evaluating-models.html#create-a-random-forest-model-1",
     "title": "4 - Evaluating models",
     "section": "Create a random forest model ",
-    "text": "Create a random forest model \n\nrf_wflow <- workflow(rings ~ ., rf_spec)\nrf_wflow\n#> ══ Workflow ══════════════════════════════════════════════════════════\n#> Preprocessor: Formula\n#> Model: rand_forest()\n#> \n#> ── Preprocessor ──────────────────────────────────────────────────────\n#> rings ~ .\n#> \n#> ── Model ─────────────────────────────────────────────────────────────\n#> Random Forest Model Specification (regression)\n#> \n#> Main Arguments:\n#>   trees = 1000\n#> \n#> Computational engine: ranger"
+    "text": "Create a random forest model \n\nrf_wf <- workflow(rings ~ ., rf_spec)\nrf_wf\n#> ══ Workflow ══════════════════════════════════════════════════════════\n#> Preprocessor: Formula\n#> Model: rand_forest()\n#> \n#> ── Preprocessor ──────────────────────────────────────────────────────\n#> rings ~ .\n#> \n#> ── Model ─────────────────────────────────────────────────────────────\n#> Random Forest Model Specification (regression)\n#> \n#> Main Arguments:\n#>   trees = 1000\n#> \n#> Computational engine: ranger"
   },
   {
     "objectID": "slides/04-evaluating-models.html#your-turn-3",
     "href": "slides/04-evaluating-models.html#your-turn-3",
     "title": "4 - Evaluating models",
     "section": "Your turn",
-    "text": "Your turn\n\nUse fit_resamples() and rf_wflow to:\n\nkeep predictions\ncompute metrics\nplot true vs. predicted values\n\n\n\n\n08:00"
+    "text": "Your turn\n\nUse fit_resamples() and rf_wf to:\n\nkeep predictions\ncompute metrics\nplot true vs. predicted values\n\n\n\n\n08:00"
   },
   {
     "objectID": "slides/04-evaluating-models.html#evaluating-model-performance-4",
     "href": "slides/04-evaluating-models.html#evaluating-model-performance-4",
     "title": "4 - Evaluating models",
     "section": "Evaluating model performance ",
-    "text": "Evaluating model performance \n\nctrl_abalone <- control_resamples(save_pred = TRUE)\n\n# random forest uses random numbers so set the seed first\n\nset.seed(2)\nrf_res <- fit_resamples(rf_wflow, ring_folds, control = ctrl_abalone)\ncollect_metrics(rf_res)\n#> # A tibble: 2 × 6\n#>   .metric .estimator  mean     n std_err .config             \n#>   <chr>   <chr>      <dbl> <int>   <dbl> <chr>               \n#> 1 rmse    standard   2.17      5  0.0622 Preprocessor1_Model1\n#> 2 rsq     standard   0.548     5  0.0153 Preprocessor1_Model1"
+    "text": "Evaluating model performance \n\nctrl_abalone <- control_resamples(save_pred = TRUE)\n\n# random forest uses random numbers so set the seed first\n\nset.seed(2)\nrf_res <- fit_resamples(rf_wf, ring_folds, control = ctrl_abalone)\ncollect_metrics(rf_res)\n#> # A tibble: 2 × 6\n#>   .metric .estimator  mean     n std_err .config             \n#>   <chr>   <chr>      <dbl> <int>   <dbl> <chr>               \n#> 1 rmse    standard   2.17      5  0.0622 Preprocessor1_Model1\n#> 2 rsq     standard   0.548     5  0.0153 Preprocessor1_Model1"
   },
   {
     "objectID": "slides/04-evaluating-models.html#section-6",
@@ -753,7 +753,7 @@
     "href": "slides/04-evaluating-models.html#the-final-fit",
     "title": "4 - Evaluating models",
     "section": "The final fit ",
-    "text": "The final fit \nSuppose that we choose to use our random forest model.\nLet’s fit the model on the training set and verify our performance using the test set.\n\nWe’ve shown you fit() and predict() (+ augment()) but there is a shortcut:\n\n# ring_split has train + test info\nfinal_fit <- last_fit(rf_wflow, ring_split) \n\nfinal_fit\n#> # Resampling results\n#> # Manual resampling \n#> # A tibble: 1 × 6\n#>   splits             id               .metrics .notes   .predictions .workflow \n#>   <list>             <chr>            <list>   <list>   <list>       <list>    \n#> 1 <split [3340/837]> train/test split <tibble> <tibble> <tibble>     <workflow>"
+    "text": "The final fit \nSuppose that we choose to use our random forest model.\nLet’s fit the model on the training set and verify our performance using the test set.\n\nWe’ve shown you fit() and predict() (+ augment()) but there is a shortcut:\n\n# ring_split has train + test info\nfinal_fit <- last_fit(rf_wf, ring_split) \n\nfinal_fit\n#> # Resampling results\n#> # Manual resampling \n#> # A tibble: 1 × 6\n#>   splits             id               .metrics .notes   .predictions .workflow \n#>   <list>             <chr>            <list>   <list>   <list>       <list>    \n#> 1 <split [3340/837]> train/test split <tibble> <tibble> <tibble>     <workflow>"
   },
   {
     "objectID": "slides/04-evaluating-models.html#what-is-in-final_fit",
